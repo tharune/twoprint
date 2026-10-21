@@ -1,0 +1,4 @@
+# Public overview only: keep implementation and local files outside this repository.
+*
+!README.md
+!.gitignore
