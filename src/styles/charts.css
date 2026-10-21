@@ -1,0 +1,410 @@
+@layer app {
+  /* ---------- Time charts on TradingView's Lightweight Charts ---------- */
+  .lw {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+    outline: none;
+    touch-action: pan-y;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .lw:focus-visible {
+    outline: 2px solid var(--brand);
+    outline-offset: 2px;
+    border-radius: var(--r-ctl);
+  }
+  /* The library fills this box and sizes itself to it. */
+  .lw__canvas {
+    position: absolute;
+    inset: 0;
+  }
+  .lw__legend {
+    position: absolute;
+    top: 6px;
+    left: 8px;
+    z-index: 3;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px var(--s-3);
+    max-width: calc(100% - 5rem);
+    color: var(--muted);
+    font-size: var(--fs-xs);
+    font-variant-numeric: tabular-nums;
+    pointer-events: none;
+  }
+  .lw__legend b {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .lw__legend .is-up {
+    color: var(--long);
+  }
+  .lw__legend .is-down {
+    color: var(--short);
+  }
+  .lw__tip {
+    position: absolute;
+    top: 8px;
+    z-index: 4;
+    display: grid;
+    gap: 1px;
+    min-width: 7rem;
+    padding: 0.375rem 0.625rem;
+    background: var(--slip);
+    border: 1px solid var(--line-2);
+    border-radius: var(--r-ctl);
+    box-shadow: var(--shadow-pop);
+    font-size: var(--fs-xs);
+    line-height: 1.35;
+    pointer-events: none;
+    transform: translateX(-50%);
+  }
+  .lw__tip b {
+    font-size: var(--fs-base);
+    font-variant-numeric: tabular-nums;
+  }
+  .lw__tip span,
+  .lw__tip i {
+    color: var(--muted);
+    font-style: normal;
+  }
+  .lw__veil {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    pointer-events: none;
+  }
+  .lw__veil--empty {
+    padding: 0 var(--s-6);
+    color: var(--muted);
+    font-size: var(--fs-sm);
+    text-align: center;
+  }
+  /* A loading chart is a soft band moving across where the chart will be, not a message that something is missing. */
+  .lw__shimmer {
+    position: absolute;
+    inset: 14% 0 20% 0;
+    border-radius: 12px;
+    background: linear-gradient(90deg, var(--wash) 0%, color-mix(in srgb, var(--wash) 35%, var(--slip)) 50%, var(--wash) 100%);
+    background-size: 220% 100%;
+    animation: lw-shimmer 1.6s linear infinite;
+    opacity: 0.8;
+  }
+  @keyframes lw-shimmer {
+    to {
+      background-position: -220% 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .lw__shimmer {
+      animation: none;
+    }
+  }
+
+  /* ---------- The order book as depth ---------- */
+  .depthchart {
+    flex: 0 0 auto;
+    min-width: 0;
+    padding-top: var(--s-3);
+  }
+  .depthchart__quotes {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--s-3);
+    margin: 0;
+    padding: 0 var(--s-2) var(--s-4);
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .depthchart__quotes dt {
+    margin-bottom: var(--s-1);
+    color: var(--muted);
+    font-size: var(--fs-xs);
+  }
+  .depthchart__quotes dd {
+    margin: 0;
+    font-size: var(--fs-sm);
+    font-weight: 600;
+  }
+  .depthchart__bid dd { color: var(--long); }
+  .depthchart__ask dd { color: var(--short); }
+  .depthchart__status {
+    padding: 0 var(--s-2) var(--s-3);
+    color: var(--muted);
+    font-size: var(--fs-xs);
+  }
+  .depthchart__references {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--s-2) var(--s-4);
+    margin-bottom: var(--s-3);
+    padding-inline: var(--s-2);
+    color: var(--muted);
+    font-size: var(--fs-xs);
+    font-variant-numeric: tabular-nums;
+  }
+  .depthchart__oracle {
+    margin-left: auto;
+    color: var(--brand-strong);
+    text-align: right;
+  }
+  .depthchart__oracle small {
+    display: block;
+    margin-top: var(--s-1);
+    color: var(--muted);
+    font-size: inherit;
+  }
+  .depth {
+    position: relative;
+    width: 100%;
+  }
+  .depth--empty {
+    display: grid;
+    place-items: center;
+    color: var(--muted);
+    font-size: var(--fs-sm);
+  }
+  .depth svg {
+    display: block;
+    overflow: visible;
+  }
+  .depth__grid {
+    stroke: var(--chart-grid);
+    stroke-width: 1;
+  }
+  .depth__tick {
+    fill: var(--muted);
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+  }
+  .depth__line {
+    fill: none;
+    stroke-width: 2;
+    stroke-linejoin: round;
+  }
+  .depth__line--bid {
+    stroke: var(--long);
+  }
+  .depth__line--ask {
+    stroke: var(--short);
+  }
+  .depth__mid,
+  .depth__cursor {
+    stroke: var(--line-2);
+    stroke-width: 1;
+    stroke-dasharray: 4 4;
+  }
+  .depth__oracle {
+    stroke: var(--brand);
+    stroke-width: 1.5;
+  }
+
+  /* ---------- The Advanced price chart ---------- */
+  .nchart {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    gap: var(--s-3);
+    min-height: 0;
+  }
+  .nchart__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-2) var(--s-4);
+  }
+  .nchart__tools {
+    display: flex;
+    gap: var(--s-2);
+  }
+  .tchip {
+    height: 1.75rem;
+    padding: 0 0.625rem;
+    border: 1px solid var(--line-2);
+    border-radius: var(--r-ctl);
+    color: var(--muted);
+    font-size: var(--fs-sm);
+    font-weight: 550;
+    transition: background var(--t-fast) var(--ease), color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+  }
+  .tchip:hover {
+    color: var(--ink);
+    background: var(--wash);
+  }
+  .tchip[aria-pressed="true"] {
+    background: var(--brand-soft);
+    border-color: var(--brand-line);
+    color: var(--ink);
+  }
+
+  /* ---------- Things measured against each other ---------- */
+  .rank {
+    display: grid;
+    gap: var(--s-4);
+    padding: var(--s-2) 0 var(--s-3);
+    list-style: none;
+  }
+  .rank__row {
+    display: grid;
+    grid-template-columns: minmax(5rem, 9rem) minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--s-4);
+  }
+  .rank__name {
+    display: grid;
+    gap: 1px;
+  }
+  .rank__name b {
+    font-weight: 600;
+  }
+  .rank__name small {
+    color: var(--muted);
+    font-size: var(--fs-xs);
+  }
+  .rank__track {
+    height: 0.625rem;
+    border-radius: 999px;
+    background: var(--wash);
+    overflow: hidden;
+  }
+  .rank__fill {
+    display: block;
+    height: 100%;
+    min-width: 0.25rem;
+    border-radius: inherit;
+    background: var(--brand);
+    transition: width var(--t-med) var(--ease);
+  }
+  .rank__fill[data-tone="long"] {
+    background: var(--long);
+  }
+  .rank__fill[data-tone="short"] {
+    background: var(--short);
+  }
+  .rank__fill[data-tone="none"] {
+    width: 0 !important;
+    min-width: 0;
+  }
+  .rank__value {
+    min-width: 4.5rem;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    text-align: right;
+  }
+
+  /* ---------- A chart that fills the height it is given ---------- */
+  .fill {
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .fill__in {
+    position: absolute;
+    inset: 0;
+  }
+
+  /* ---------- Sparklines ---------- */
+  .spark {
+    display: block;
+    overflow: visible;
+  }
+  .spark__line {
+    fill: none;
+    stroke: var(--brand);
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  .spark__area {
+    fill: var(--brand);
+    fill-opacity: 0.1;
+  }
+  .spark--up .spark__line {
+    stroke: var(--long);
+  }
+  .spark--up .spark__area {
+    fill: var(--long);
+  }
+  .spark--down .spark__line {
+    stroke: var(--short);
+  }
+  .spark--down .spark__area {
+    fill: var(--short);
+  }
+  .spark__dot {
+    fill: var(--muted);
+  }
+  .spark--up .spark__dot {
+    fill: var(--long);
+  }
+  .spark--down .spark__dot {
+    fill: var(--short);
+  }
+  .spark--empty {
+    display: inline-block;
+  }
+
+  /* ---------- A whole cut into parts ---------- */
+  .split {
+    display: grid;
+    gap: var(--s-3);
+    margin: 0;
+  }
+  .split__bar {
+    display: flex;
+    gap: 2px;
+    height: 0.625rem;
+  }
+  .split__bar--empty {
+    background: var(--wash);
+    border-radius: 999px;
+  }
+  .split__part {
+    min-width: 4px;
+    border-radius: 3px;
+    background: var(--brand);
+  }
+  .split__part--brand {
+    background: var(--brand);
+  }
+  .split__part--long {
+    background: var(--long);
+  }
+  .split__part--short {
+    background: var(--short);
+  }
+  .split__part--muted {
+    background: var(--line-2);
+  }
+  /* The same slate as a muted bar in a chart, for a key that must match one. */
+  .split__part--slate {
+    background: var(--muted);
+  }
+  .split__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2) var(--s-6);
+    font-size: var(--fs-sm);
+  }
+  .split__key {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--ink-2);
+  }
+  .split__key b {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .split__swatch {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+  }
+}

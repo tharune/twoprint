@@ -1,0 +1,1730 @@
+@layer landing {
+  /*
+   * The landing page. One idea per section, a picture of it beside the words, and the picture changes sides as you scroll.
+   * Every picture is made of the same thing, a step line of oracle prints, so the page has one visual language and one accent.
+   */
+  .main--home {
+    padding: 0;
+  }
+  .landing {
+    --out: cubic-bezier(0.16, 1, 0.3, 1);
+    --gutter: clamp(1rem, 4vw, 2.5rem);
+    --stage-r: 6px;
+    position: relative;
+    overflow-x: clip;
+  }
+  .landing > * {
+    position: relative;
+  }
+  /* The small label over a figure: set small, in plain sentence case so a long one still reads. */
+  .live__item dt,
+  .l-stats dt {
+    font-size: 0.75rem;
+    font-weight: 500;
+  }
+
+  /* ---------- Hero ---------- */
+  /*
+   * The first screen is the hero alone: the promise set large in the middle, the feed moving behind it, and the chain's figures
+   * along the bottom edge. Everything else arrives as you scroll.
+   */
+  .hero {
+    display: grid;
+    isolation: isolate;
+    min-height: calc(100vh - var(--header-h));
+    min-height: calc(100svh - var(--header-h));
+    padding: clamp(3rem, 8vh, 6rem) var(--gutter) 0;
+  }
+  .hero__in {
+    display: grid;
+    justify-items: center;
+    align-self: center;
+    width: 100%;
+    max-width: 62rem;
+    margin-inline: auto;
+    text-align: center;
+  }
+  /* The big buttons share the tiles' radius, so the first screen has one corner. */
+  .landing .btn--lg {
+    border-radius: var(--r-lg);
+  }
+  /* Headlines are set like the logo: Instrument Sans at 650 with the same tight tracking. */
+  .hero__title {
+    font-size: clamp(3.25rem, 8.4vw, 7.25rem);
+    font-weight: 520;
+    line-height: 0.94;
+    letter-spacing: -0.052em;
+  }
+  .hero__title span {
+    display: block;
+    white-space: nowrap;
+  }
+  /* The promise is the second line, so it carries the brand. */
+  .hero__title span + span {
+    color: var(--brand);
+  }
+  .hero__lede {
+    max-width: 36rem;
+    margin-top: var(--s-6);
+    color: var(--ink-2);
+    font-size: 1.125rem;
+    line-height: 1.6;
+    text-wrap: pretty;
+  }
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--s-3);
+    margin-top: var(--s-8);
+  }
+  .hero {
+    position: relative;
+  }
+
+  /* The chain's own figures, under the first screen: a strip of tape across the page, ruled top and bottom, not a card. */
+  .hero {
+    align-content: center;
+    /* One column that never grows to fit the tape: the tape is as long as the prints it holds and clips the rest. */
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(2rem, 5vw, 3.5rem);
+  }
+  /* A small live pill above the headline: the testnet it runs on and each market's oracle price, quiet next to the promise. */
+  .hero__eyebrow {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: var(--s-2) var(--s-4);
+    margin-bottom: var(--s-6);
+    font-size: 0.8125rem;
+  }
+  .hero__live-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--ink-2);
+    font-weight: 500;
+  }
+  .hero__live-tag i {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--long);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--long) 55%, transparent);
+  }
+  .landing[data-motion] .hero__live-tag i {
+    animation: live-dot 2.4s ease-out infinite;
+  }
+  @keyframes live-dot {
+    to {
+      box-shadow: 0 0 0 0.5rem transparent;
+    }
+  }
+  .quotes {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: var(--s-1) var(--s-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .quotes__item {
+    display: inline-flex;
+    align-items: baseline;
+    gap: var(--s-2);
+  }
+  .quotes__sym {
+    color: var(--muted);
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .quotes__px {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /*
+   * The field behind the first screen is a canvas (Ripple.tsx): a still grid that bends where the pointer moves; the closing panel keeps the CSS bands: full-width chart lines,
+   * each scrolling sideways, neighbours in opposite directions, green where the week rose and red where it fell. Each band is
+   * taller than its share and overlaps the next, so the lines weave through one another rather than sitting in strips.
+   */
+  .livefield {
+    position: absolute;
+    inset: 0 0 clamp(6rem, 14vh, 9rem);
+    z-index: -1;
+    pointer-events: none;
+    -webkit-mask: radial-gradient(42% 46% at 50% 42%, rgba(0, 0, 0, 0.08) 40%, #000 100%);
+    mask: radial-gradient(42% 46% at 50% 42%, rgba(0, 0, 0, 0.08) 40%, #000 100%);
+  }
+  /* A still grid until the pointer moves over it. It fades toward the middle, so the words sit on clean paper. */
+  .livefield--ripple {
+    inset: 0;
+    -webkit-mask: radial-gradient(ellipse 62% 55% at 50% 45%, rgba(0, 0, 0, 0.45), #000 100%);
+    mask: radial-gradient(ellipse 62% 55% at 50% 45%, rgba(0, 0, 0, 0.45), #000 100%);
+  }
+  .livefield__canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+  .livefield__band {
+    --c: var(--muted);
+    position: absolute;
+    inset-inline: 0;
+    top: calc(var(--k) * 22% - 2%);
+    height: 40%;
+    overflow: hidden;
+    opacity: calc(0.75 - var(--k) * 0.06);
+  }
+  .livefield__band[data-dir="up"] {
+    --c: var(--long);
+  }
+  .livefield__band[data-dir="down"] {
+    --c: var(--short);
+  }
+  /* Two copies of the week side by side, twice the band's width; the scroll moves it by one copy. */
+  .livefield__chart {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 200%;
+    max-width: none; /* the base rule caps an svg at its box, which would leave half of every loop empty */
+    height: 100%;
+  }
+  .livefield__line {
+    fill: none;
+    stroke: var(--c);
+    stroke-width: 1.75;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+  /* A soft glow under each line. */
+  .livefield__band > .livefield__chart {
+    filter: drop-shadow(0 0 3px color-mix(in srgb, var(--c) 45%, transparent));
+  }
+  /*
+   * The sweep: a brighter copy of the line, seen only through a narrow window of light. The copy scrolls with the line underneath;
+   * the window moves across on its own, so a highlight travels along the chart.
+   */
+  .livefield__glint {
+    position: absolute;
+    inset: 0;
+    display: none;
+  }
+  .livefield__glint .livefield__line {
+    stroke: color-mix(in srgb, var(--c) 45%, #fff);
+    stroke-width: 2.5;
+  }
+  .livefield__glint .livefield__chart {
+    filter: drop-shadow(0 0 6px var(--c));
+  }
+  .hero__live {
+    align-self: end;
+    margin-top: clamp(2.5rem, 6vh, 4rem);
+    margin-inline: calc(var(--gutter) * -1);
+    padding-inline: var(--gutter);
+    border-block: 1px solid var(--line-2);
+    background: var(--slip);
+  }
+  .live__in {
+    display: grid;
+    grid-template-columns: repeat(4, auto);
+    justify-content: space-between;
+    max-width: var(--w-landing);
+    margin: 0 auto;
+  }
+  .live__item {
+    display: grid;
+    align-content: start;
+    gap: 2px;
+    padding: var(--s-4) clamp(var(--s-3), 2.2vw, var(--s-6));
+  }
+  .live__item:first-child {
+    padding-left: 0;
+  }
+  .live__item + .live__item {
+    border-left: 1px dashed var(--line-2);
+  }
+  .live__item dt {
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .live__item dd {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    margin: 0;
+    font-size: clamp(1.125rem, 2.6vw, 1.5rem);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    line-height: 1.25;
+  }
+  .live__item dd.live__sub {
+    display: block;
+    color: var(--muted);
+    font-size: var(--fs-xs);
+    font-weight: 400;
+    letter-spacing: 0;
+    line-height: 1.4;
+  }
+  /* Four figures need room; below this they sit two by two rather than run into each other. */
+  @media (max-width: 760px) {
+    .live__in {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .live__item:nth-child(3) {
+      padding-left: 0;
+      border-left: 0;
+    }
+    .live__item:nth-child(n + 3) {
+      border-top: 1px solid var(--line);
+    }
+  }
+
+  /* The oracle's prints, live. */
+  .sk--plot {
+    position: absolute;
+    inset: 8% 0 4%;
+  }
+
+  /* The tape: every market's prints in one row, newest on the right, under the chain's figures. */
+  .tape {
+    min-height: 2.5rem;
+    margin-inline: calc(var(--gutter) * -1);
+    overflow: hidden;
+    border-top: 1px dashed var(--line-2);
+    /* Edge to edge, with both ends fading out rather than being cut. */
+    -webkit-mask: linear-gradient(90deg, transparent, #000 14%, #000 94%, transparent);
+    mask: linear-gradient(90deg, transparent, #000 14%, #000 94%, transparent);
+  }
+  .tape__row {
+    display: flex;
+    justify-content: flex-end;
+    list-style: none;
+    transition: transform 1.1s var(--out);
+  }
+  .tape__tick {
+    display: flex;
+    flex: none;
+    align-items: baseline;
+    gap: var(--s-2);
+    width: 15rem;
+    padding: var(--s-3) var(--s-4);
+    border-left: 1px dashed var(--line);
+    font-size: var(--fs-xs);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .tape__tick b {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .tape__px {
+    color: var(--ink-2);
+  }
+  .tape__mv {
+    color: var(--muted);
+  }
+  .tape__mv[data-dir="up"] {
+    color: var(--long);
+  }
+  .tape__mv[data-dir="down"] {
+    color: var(--short);
+  }
+  .tape__idx {
+    margin-left: auto;
+    color: var(--faint);
+  }
+
+  /* A home section's way to the rest of it, in the docs. */
+  .l-more {
+    display: inline-flex;
+    gap: var(--s-2);
+    color: var(--brand-strong);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .l-more span {
+    transition: transform var(--t-med) var(--ease);
+  }
+  .l-more:hover span {
+    transform: translateX(4px);
+  }
+
+  /* ---------- Docs ---------- */
+  /* The same sections as the home page, in a column beside a menu that stays in view. */
+  .docs__in {
+    display: grid;
+    grid-template-columns: 13rem minmax(0, 1fr);
+    gap: var(--s-8);
+    max-width: calc(var(--w-landing) + 16rem);
+    margin-inline: auto;
+    padding: var(--s-10) var(--gutter) 0;
+  }
+  .docs__nav {
+    position: sticky;
+    top: calc(var(--header-h) + var(--s-8));
+    align-self: start;
+  }
+  .docs__title {
+    margin-bottom: var(--s-4);
+    font-size: 1.75rem;
+    font-weight: 650;
+    letter-spacing: -0.035em;
+  }
+  .docs__nav ol {
+    display: grid;
+    list-style: none;
+    border-left: 1px solid var(--line-2);
+  }
+  .docs__nav a {
+    display: block;
+    margin-left: -1px;
+    padding: var(--s-2) var(--s-4);
+    border-left: 2px solid transparent;
+    color: var(--muted);
+    font-size: var(--fs-sm);
+    text-decoration: none;
+    transition: color var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+  }
+  .docs__nav a:hover {
+    color: var(--ink);
+  }
+  .docs__nav a[aria-current] {
+    border-left-color: var(--brand);
+    color: var(--ink);
+    font-weight: 600;
+  }
+  /* In the docs column a section already sits inside the page's gutter. */
+  .docs__body .split {
+    padding-inline: 0;
+  }
+  .docs__body .split:first-child {
+    padding-top: 0;
+  }
+  .docs__body #modes .split__in {
+    max-width: none;
+  }
+  /* Narrow, the menu runs across the top and scrolls sideways, and the sections take the whole width. */
+  @media (max-width: 900px) {
+    .docs__in {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--s-4);
+      padding-top: var(--s-6);
+    }
+    .docs__nav {
+      position: static;
+    }
+    .docs__title {
+      margin-bottom: var(--s-3);
+      font-size: 1.5rem;
+    }
+    .docs__nav ol {
+      display: flex;
+      gap: var(--s-1);
+      overflow-x: auto;
+      border-left: 0;
+      border-bottom: 1px solid var(--line-2);
+      scrollbar-width: none;
+    }
+    .docs__nav ol::-webkit-scrollbar {
+      display: none;
+    }
+    .docs__nav li {
+      flex: none;
+    }
+    .docs__nav a {
+      margin: 0 0 -1px;
+      padding: var(--s-2) var(--s-3);
+      border-left: 0;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+    }
+    .docs__nav a[aria-current] {
+      border-bottom-color: var(--brand);
+    }
+  }
+
+  /* ---------- A section: words on one side, a picture on the other ---------- */
+  .split {
+    padding: clamp(3rem, 6.5vw, 5.5rem) var(--gutter);
+  }
+  .split__in {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    gap: clamp(2.5rem, 6vw, 5.5rem);
+    align-items: center;
+    /* The section is a grid, where auto margins would shrink this to its content: the width is asked for. */
+    width: 100%;
+    max-width: var(--w-landing);
+    margin-inline: auto;
+  }
+  .split--flip .split__in {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+  }
+  .split--flip .split__text {
+    order: 2;
+  }
+  .split--flip .split__visual {
+    order: 1;
+  }
+  .l-title {
+    font-size: clamp(2rem, 3.8vw, 3rem);
+    font-weight: 560;
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+    text-wrap: balance;
+  }
+  .l-lede {
+    max-width: 30rem;
+    margin-top: var(--s-4);
+    color: var(--ink-2);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    text-wrap: pretty;
+  }
+  .l-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(5.5rem, 1fr));
+    gap: var(--s-4) var(--s-6);
+    margin: var(--s-8) 0 0;
+    padding-top: var(--s-6);
+    border-top: 1px solid var(--line);
+  }
+  .l-stats > div {
+    display: grid;
+    align-content: start;
+    gap: 2px;
+  }
+  .l-stats dt {
+    color: var(--muted);
+    line-height: 1.4;
+  }
+  .l-stats dd {
+    order: -1;
+    margin: 0 0 var(--s-1);
+    color: var(--ink);
+    font-size: 2rem;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.1;
+  }
+  /* The points read as line items: each on its own ruled row, led by a dash in the brand. */
+  .l-points {
+    max-width: 30rem;
+    margin-top: var(--s-6);
+    border-bottom: 1px solid var(--line);
+  }
+  .l-points li {
+    display: grid;
+    grid-template-columns: 1.5rem minmax(0, 1fr);
+    padding: var(--s-3) 0;
+    border-top: 1px solid var(--line);
+    color: var(--ink-2);
+    line-height: 1.5;
+  }
+  .l-points li::before {
+    content: "\2014";
+    color: var(--brand);
+    font-weight: 600;
+  }
+
+  /* The picture. One treatment for all of them: a plain surface with a hairline. */
+  .stage {
+    margin: 0;
+    padding: var(--s-6);
+    background: var(--slip);
+    border: 1px solid var(--line-2);
+    border-radius: var(--stage-r);
+  }
+
+  /* The line every picture is drawn with: straight between the points it joins. */
+  .fv__line,
+  .rk__line {
+    fill: none;
+    stroke: var(--brand);
+    stroke-width: 2;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+
+  /* How an order fills */
+  .fv__plot {
+    position: relative;
+    height: 19rem;
+  }
+  .fv__plot svg,
+  .rk__plot svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .fv__ref {
+    stroke: var(--faint);
+    stroke-width: 1;
+    stroke-dasharray: 4 4;
+    vector-effect: non-scaling-stroke;
+  }
+  .fv__guide {
+    stroke: var(--brand-line);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+  .fv__mark,
+  .fv__note {
+    position: absolute;
+    color: var(--ink);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .fv__mark {
+    transform: translateX(8px);
+  }
+  .fv__short {
+    display: none;
+  }
+  .fv__note {
+    color: var(--muted);
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    transform: translateY(6px);
+  }
+  .fv__dot {
+    position: absolute;
+    width: 11px;
+    height: 11px;
+    margin: -5.5px 0 0 -5.5px;
+    border: 2px solid var(--brand);
+    border-radius: 50%;
+    background: var(--slip);
+  }
+  .fv__cap {
+    margin-top: var(--s-4);
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: var(--fs-sm);
+  }
+
+  /* The story pictures: a step tracker, the line drawn print by print under a live head, and a line saying what just happened. */
+  .sq__steps {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2);
+    margin: 0 0 var(--s-4);
+    padding: 0;
+    list-style: none;
+  }
+  .sq__step {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 11px 3px 4px;
+    border: 1px solid var(--line-2);
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    transition: color 0.3s, border-color 0.3s, background-color 0.3s;
+  }
+  .sq__step i {
+    display: grid;
+    place-items: center;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--line);
+    font-size: 0.6875rem;
+    font-style: normal;
+    font-weight: 600;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  .sq__step[data-state="now"] {
+    border-color: var(--brand);
+    background: color-mix(in srgb, var(--brand) 9%, transparent);
+    color: var(--ink);
+  }
+  .sq__step[data-state="now"] i,
+  .sq__step[data-state="done"] i {
+    background: var(--brand);
+    color: var(--slip);
+  }
+  .sq__step[data-state="done"] {
+    color: var(--ink-2);
+  }
+  /* The moving point: the latest price, where the story is up to. */
+  .sq__head {
+    z-index: 2;
+    position: absolute;
+    width: 11px;
+    height: 11px;
+    margin: -5.5px 0 0 -5.5px;
+    border-radius: 50%;
+    background: var(--brand);
+    box-shadow: 0 0 0 3px var(--slip);
+    pointer-events: none;
+    /* Placed by the story's playhead every frame, in step with the line it leaves behind. */
+    transition: background-color 0.3s;
+  }
+  .sq__head[data-tone="warn"] {
+    background: var(--short);
+  }
+  .sq__head[data-tone="short"] {
+    background: var(--short);
+  }
+  .landing[data-motion] .sq__head::after {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+    color: var(--brand);
+    animation: ring 1.4s var(--out) infinite;
+  }
+  .landing[data-motion] .sq__head[data-tone] ::after,
+  .landing[data-motion] .sq__head[data-tone]::after {
+    color: var(--short);
+  }
+  .sq__say {
+    min-height: 3.1rem;
+    margin-top: var(--s-4);
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--line);
+    color: var(--ink);
+    font-size: var(--fs-md);
+    line-height: 1.45;
+  }
+  .landing[data-motion] .sq__say,
+  .landing[data-motion] .sq__say-in {
+    animation: appear 0.5s var(--out) both;
+  }
+  .sq .fv__cap {
+    margin-top: var(--s-2);
+    padding-top: 0;
+    border-top: 0;
+  }
+  .fv__gap {
+    stroke: var(--brand);
+    stroke-width: 1.5;
+    stroke-dasharray: 3 3;
+    vector-effect: non-scaling-stroke;
+  }
+
+  /* The two-print rule */
+  .rk__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-3);
+  }
+  /* The rule itself: two pips that fill as updates land past the level, and empty when one comes back. */
+  .rk__count {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--muted);
+    font-size: var(--fs-xs);
+    font-weight: 500;
+  }
+  .rk__count span {
+    margin-right: 2px;
+  }
+  .rk__count i {
+    width: 14px;
+    height: 14px;
+    border: 1.5px solid var(--line-2);
+    border-radius: 50%;
+    transition: background-color 0.25s, border-color 0.25s, transform 0.25s var(--out);
+  }
+  .rk__count i[data-on] {
+    border-color: var(--short);
+    background: var(--short);
+    transform: scale(1.12);
+  }
+  .rk__zone--hot {
+    fill: color-mix(in srgb, var(--short) 24%, var(--slip));
+  }
+  .rk__dot {
+    z-index: 1;
+  }
+  /* The first two updates past the level are numbered, so the rule can be read straight off the picture. */
+  .rk__dot[data-n] {
+    display: grid;
+    place-items: center;
+    width: 17px;
+    height: 17px;
+    margin: -8.5px 0 0 -8.5px;
+    color: var(--slip);
+    font-size: 0.625rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .rk__plot {
+    isolation: isolate;
+  }
+  .rk__flash {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: var(--r-md, 10px);
+    background: radial-gradient(60% 80% at 50% 70%, color-mix(in srgb, var(--short) 38%, transparent), transparent 75%);
+    pointer-events: none;
+  }
+  .landing[data-motion] .rk__flash {
+    animation: flash 0.9s var(--out) both;
+  }
+  @keyframes flash {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+  .landing[data-motion] .rk__plot[data-hit] {
+    animation: shake 0.45s ease-out;
+  }
+  @keyframes shake {
+    15% {
+      transform: translateX(-5px);
+    }
+    35% {
+      transform: translateX(4px);
+    }
+    55% {
+      transform: translateX(-3px);
+    }
+    75% {
+      transform: translateX(2px);
+    }
+  }
+  /* The first update past the level pops a ring, and a pip filling pops. */
+  .landing[data-motion] .rk__dot::after {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border: 2px solid var(--short);
+    border-radius: 50%;
+    animation: ring 0.9s var(--out) both;
+  }
+  .landing[data-motion] .rk__count i[data-on] {
+    animation: pop 0.45s var(--out);
+  }
+  @keyframes pop {
+    40% {
+      transform: scale(1.6);
+    }
+  }
+  .landing[data-motion] .rk__stamp {
+    animation: slam 0.5s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+  }
+  @keyframes slam {
+    from {
+      opacity: 0;
+      transform: translate(calc(-100% - 16px), -50%) scale(2.2);
+    }
+    to {
+      opacity: 1;
+      transform: translate(calc(-100% - 16px), -50%) scale(1);
+    }
+  }
+  .rk__line--closed {
+    stroke: var(--faint);
+    stroke-dasharray: 4 4;
+  }
+  .rk__dot[data-dead] {
+    background: var(--ink-2);
+  }
+  .rk__stamp {
+    position: absolute;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--short);
+    color: var(--slip);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    transform: translate(calc(-100% - 16px), -50%);
+    white-space: nowrap;
+  }
+  .rk__plot {
+    position: relative;
+    height: 15rem;
+    margin-top: var(--s-5);
+  }
+  .rk__zone {
+    fill: color-mix(in srgb, var(--short) 14%, var(--slip));
+  }
+  .rk__entry {
+    stroke: var(--line-2);
+    stroke-width: 1;
+    stroke-dasharray: 4 4;
+    vector-effect: non-scaling-stroke;
+  }
+  .rk__level {
+    stroke: var(--short);
+    stroke-width: 1.25;
+    stroke-dasharray: 5 4;
+    vector-effect: non-scaling-stroke;
+  }
+  .rk__tag {
+    position: absolute;
+    left: 0;
+    padding: 0 6px 2px 0;
+    background: var(--slip);
+    color: var(--muted);
+    font-size: var(--fs-xs);
+    font-weight: 500;
+    line-height: 1.2;
+    transform: translateY(-50%);
+  }
+  .rk__tag--level {
+    background: none;
+    color: var(--short);
+    padding: 0 0 0 6px;
+    transform: translateY(6px);
+  }
+  .rk__dot {
+    position: absolute;
+    width: 9px;
+    height: 9px;
+    margin: -4.5px 0 0 -4.5px;
+    border-radius: 50%;
+    background: var(--short);
+    box-shadow: 0 0 0 3px var(--slip);
+  }
+  /* The line that matters most to someone about to be liquidated: it stays out of sight, holding its place, until the story ends. */
+  .rk__result .rk__fee {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: var(--s-3);
+    padding: 4px 12px 4px 8px;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--long) 14%, var(--slip));
+    color: var(--long);
+    font-size: var(--fs-sm);
+    font-weight: 650;
+    visibility: hidden;
+  }
+  .rk__fee[data-on] {
+    visibility: visible;
+  }
+  .landing[data-motion] .rk__fee[data-on] {
+    animation: fee-pop 0.7s cubic-bezier(0.2, 1.5, 0.4, 1) both, fee-glow 1.4s var(--out) 0.15s both;
+  }
+  @keyframes fee-pop {
+    from {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+    60% {
+      transform: scale(1.1);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  @keyframes fee-glow {
+    from {
+      box-shadow: 0 0 0 0 color-mix(in srgb, var(--long) 45%, transparent);
+    }
+    to {
+      box-shadow: 0 0 0 14px transparent;
+    }
+  }
+  .rk__result {
+    min-height: 8.5rem;
+    margin-top: var(--s-5);
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--line);
+  }
+  .rk__result b {
+    font-size: var(--fs-md);
+  }
+  .rk__result p {
+    margin-top: 2px;
+    color: var(--ink-2);
+    font-size: var(--fs-sm);
+    line-height: 1.55;
+  }
+  .rk__fine {
+    margin-top: var(--s-3);
+    color: var(--muted);
+    font-size: var(--fs-xs);
+  }
+
+  /* The vaults */
+  .vaults {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--s-3);
+    padding: var(--s-4);
+    list-style: none;
+  }
+  .vault {
+    display: grid;
+    align-content: space-between;
+    gap: var(--s-5);
+    min-height: 7.5rem;
+    padding: var(--s-4);
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+  }
+  /* The vault that is open takes the whole row, with its markets inside. */
+  .vault[data-live] {
+    grid-column: 1 / -1;
+    background: var(--brand-soft);
+    border-color: var(--brand-line);
+  }
+  .vault__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2px var(--s-3);
+  }
+  .vault__head b {
+    font-size: var(--fs-md);
+    font-weight: 600;
+  }
+  /* A planned vault is a small card: its state sits under its name, the same in all three. */
+  .vault:not([data-live]) .vault__head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .vault__state {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--muted);
+    font-size: var(--fs-sm);
+    font-weight: 550;
+  }
+  .vault[data-live] .vault__state {
+    color: var(--ink-2);
+  }
+  .vault__markets {
+    color: var(--ink-2);
+    font-size: var(--fs-sm);
+  }
+  .vault__rows {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-3);
+    list-style: none;
+  }
+  .vault__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-3);
+    padding: var(--s-3) var(--s-4);
+    background: var(--slip);
+    border: 1px solid var(--brand-line);
+    border-radius: 4px;
+  }
+  .vault__sym,
+  .vault__px {
+    display: grid;
+    gap: 1px;
+  }
+  .vault__px {
+    justify-items: end;
+    font-variant-numeric: tabular-nums;
+  }
+  .vault__sym b,
+  .vault__px b {
+    font-weight: 600;
+  }
+  .vault__sym small,
+  .vault__px small {
+    color: var(--muted);
+    font-size: var(--fs-xs);
+  }
+  .vault__foot {
+    color: var(--muted);
+    font-size: var(--fs-xs);
+  }
+
+  /* The receipt: a slip of till paper, torn along the bottom, set down a little crooked. */
+  #fees .split__visual {
+    filter: drop-shadow(0 22px 22px rgba(0, 0, 0, 0.14));
+  }
+  .rc {
+    --tear: 9px;
+    max-width: 26rem;
+    margin-inline: auto;
+    padding-bottom: calc(var(--s-6) + var(--tear));
+    border: 0;
+    border-radius: 0;
+    font-size: var(--fs-sm);
+    transform: rotate(-1.25deg);
+    -webkit-mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / calc(var(--tear) * 2) 100%;
+    mask: conic-gradient(from -45deg at bottom, #0000, #000 1deg 89deg, #0000 90deg) 50% / calc(var(--tear) * 2) 100%;
+  }
+  .rc__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--s-1) var(--s-3);
+    padding-bottom: var(--s-4);
+    border-bottom: 1px dashed var(--line-2);
+  }
+  .rc__head b {
+    font-size: var(--fs-base);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .rc__head span {
+    font-size: var(--fs-xs);
+  }
+  .rc__rows {
+    margin: 0;
+  }
+  .rc__rows > div {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--s-4);
+    padding: var(--s-3) 0;
+    border-bottom: 1px dashed var(--line-2);
+  }
+  .rc__rows dt {
+    color: var(--muted);
+  }
+  .rc__rows dd {
+    margin: 0;
+    font-weight: 550;
+  }
+  .rc__total {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--s-4);
+    padding-top: var(--s-5);
+  }
+  .rc__total span {
+    font-weight: 550;
+  }
+  .rc__total b {
+    color: var(--long);
+    font-size: 2.25rem;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+  }
+  .rc__total small {
+    margin-left: 2px;
+    color: var(--muted);
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    letter-spacing: 0;
+  }
+  .rc__cap {
+    margin-top: var(--s-5);
+    color: var(--muted);
+    font-size: var(--fs-xs);
+    line-height: 1.5;
+  }
+
+  /* ---------- What you trust ---------- */
+  /* What anyone can check, as a short list in the same surface as the other pictures. */
+  /* Set straight on the page, not in a box: three checks, ruled like the points beside them. */
+  .tc.stage {
+    padding: 0;
+    background: none;
+    border: 0;
+    border-bottom: 1px solid var(--line-2);
+    border-radius: 0;
+    list-style: none;
+  }
+  .tc li {
+    display: grid;
+    grid-template-columns: 2rem minmax(0, 1fr);
+    gap: var(--s-4);
+    padding: var(--s-6) 0;
+    border-top: 1px solid var(--line-2);
+  }
+  .tc__icon {
+    display: grid;
+    place-items: start center;
+    padding-top: 0.15rem;
+    color: var(--brand);
+  }
+  .tc__icon .icon {
+    width: 1.125rem;
+    height: 1.125rem;
+  }
+  .tc b {
+    font-size: 1.375rem;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+  }
+  .tc p {
+    max-width: 30rem;
+    margin-top: var(--s-1);
+    color: var(--ink-2);
+    line-height: 1.55;
+  }
+  .l-action {
+    margin-top: var(--s-8);
+  }
+
+  /* ---------- The list of who has power, in its dialog and on the Docs page ---------- */
+  .roles {
+    display: grid;
+  }
+  .role {
+    display: grid;
+    gap: var(--s-2);
+    padding: var(--s-4) 0;
+    border-top: 1px solid var(--line);
+  }
+  .role:first-child {
+    padding-top: 0;
+    border-top: 0;
+  }
+  .role h3 {
+    font-size: var(--fs-md);
+  }
+  .role p {
+    display: grid;
+    grid-template-columns: 1.125rem minmax(0, 1fr);
+    gap: var(--s-2);
+    color: var(--ink-2);
+    font-size: var(--fs-sm);
+    line-height: 1.55;
+  }
+  .role p .icon {
+    margin-top: 0.15rem;
+    width: 1rem;
+    height: 1rem;
+  }
+  .role p[data-can] .icon {
+    color: var(--long);
+  }
+  .role p[data-cannot] .icon {
+    color: var(--short);
+  }
+  .roles__holds {
+    display: grid;
+    gap: var(--s-3);
+    padding-top: var(--s-5);
+    border-top: 1px solid var(--line-2);
+    font-size: var(--fs-sm);
+    line-height: 1.55;
+  }
+  .roles__holds h3 {
+    font-size: var(--fs-md);
+  }
+  .roles__holds ul {
+    display: grid;
+    gap: var(--s-2);
+    padding-left: 1.1rem;
+    list-style: disc;
+    color: var(--ink-2);
+  }
+
+  /* ---------- The two layouts ---------- */
+  /* The one section that breaks the left-right rhythm: the headline and the words side by side, and the screenshots full width. */
+  #modes .split__in {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 76rem;
+  }
+  #modes .split__text {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+    column-gap: clamp(2.5rem, 6vw, 5.5rem);
+    width: 100%;
+    max-width: var(--w-landing);
+    margin-inline: auto;
+  }
+  #modes .l-title {
+    grid-row: 1 / span 2;
+  }
+  #modes .l-lede {
+    margin-top: 0;
+  }
+  .modes {
+    display: grid;
+    gap: var(--s-4);
+    padding: var(--s-4);
+  }
+  .modes__bar {
+    display: flex;
+    justify-content: center;
+  }
+  .modes__frame {
+    position: relative;
+    aspect-ratio: 1200 / 702;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: var(--paper);
+  }
+  .modes__img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.5s var(--ease);
+  }
+  .modes__img[data-on] {
+    opacity: 1;
+  }
+
+  /* ---------- Questions ---------- */
+  /* The list is the whole section, so it runs the width of the page with the heading above it. */
+  .faq-wide__in {
+    display: grid;
+    gap: clamp(1.5rem, 3vw, 2.5rem);
+    width: 100%;
+    max-width: var(--w-landing);
+    margin-inline: auto;
+  }
+  .faq-wide .l-title {
+    text-align: center;
+  }
+  .faq {
+    display: grid;
+    border-bottom: 1px solid var(--line-2);
+  }
+  .faq__item {
+    border-top: 1px solid var(--line-2);
+  }
+  .faq__item summary {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--s-4);
+    padding: var(--s-5) 0;
+    font-size: 1.375rem;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    list-style: none;
+    cursor: pointer;
+    transition: color var(--t-fast) var(--ease);
+  }
+  .faq__item summary:hover {
+    color: var(--brand);
+  }
+  .faq__item summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq__item summary::after {
+    content: "+";
+    flex: none;
+    color: var(--brand);
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 1;
+    transition: transform var(--t-med) var(--ease);
+  }
+  .faq__item[open] summary::after {
+    transform: rotate(45deg);
+  }
+  .faq__item p {
+    /* A line of words stays readable when the list around it is wide. */
+    max-width: 46rem;
+    padding-bottom: var(--s-6);
+    color: var(--ink-2);
+    line-height: 1.6;
+  }
+  .faq__item p a,
+  .faq__item p .linklike {
+    color: var(--brand-strong);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* ---------- The way in ---------- */
+  .closing {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--panel-bg) 92%, var(--brand)), var(--panel-bg) 75%);
+    color: var(--panel-fg);
+  }
+  .closing__panel {
+    z-index: 1;
+  }
+  /* The charts fade at both edges so they settle into the shared footer surface. */
+  .livefield--closing {
+    inset: auto 0 0.75rem 0;
+    height: clamp(8rem, 34%, 12rem);
+    -webkit-mask: linear-gradient(180deg, transparent, #000 28%, #000 65%, transparent);
+    mask: linear-gradient(180deg, transparent, #000 28%, #000 65%, transparent);
+  }
+  .livefield--closing .livefield__band {
+    top: calc(var(--k) * 30%);
+    height: 70%;
+    opacity: 0.62;
+  }
+  .livefield--closing .livefield__band[data-dir="up"] {
+    --c: var(--panel-up);
+  }
+  .livefield--closing .livefield__band[data-dir="down"] {
+    --c: var(--panel-down);
+  }
+  .closing__panel {
+    position: relative;
+    isolation: isolate;
+    max-width: calc(var(--w-landing) + var(--gutter) * 2);
+    margin-inline: auto;
+    padding: clamp(3.5rem, 8vw, 6rem) var(--gutter) clamp(5rem, 11vw, 8rem);
+    --btn-bg: var(--panel-fg);
+    --btn-fg: var(--panel-bg);
+    --btn-bg-hover: var(--panel-btn-hover);
+  }
+  .closing__title {
+    max-width: 12ch;
+    font-size: clamp(2.75rem, 6vw, 5rem);
+    font-weight: 520;
+    letter-spacing: -0.048em;
+    line-height: 0.96;
+  }
+  .closing__lede {
+    max-width: 28rem;
+    margin: var(--s-6) 0 var(--s-8);
+    color: var(--panel-muted);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    text-wrap: balance;
+  }
+
+  /* ---------- Motion ---------- */
+  /*
+   * Only a page that may animate hides anything, so a reader who asked for less motion, or a browser without
+   * IntersectionObserver, gets the whole page at once. Text eases in as it scrolls into view, and each picture draws itself.
+   */
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(14px);
+    }
+  }
+  @keyframes wipe {
+    from {
+      clip-path: inset(0 100% 0 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+  @keyframes appear {
+    from {
+      opacity: 0;
+    }
+  }
+  .landing[data-motion] [data-seq] {
+    animation: rise 0.9s var(--out) both;
+    animation-delay: calc(var(--i, 0) * 110ms + 120ms);
+  }
+  .landing[data-motion] .rv {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.8s var(--out), transform 0.8s var(--out);
+    transition-delay: var(--rv-d, 0ms);
+  }
+  .landing[data-motion] .rv[data-in] {
+    opacity: 1;
+    transform: none;
+  }
+  /* The live end of a line breathes, so it reads as the price now rather than a picture of it. */
+  .landing[data-motion] .spark__dot {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: dot-breathe 2s ease-in-out infinite;
+  }
+  @keyframes dot-breathe {
+    50% {
+      transform: scale(1.7);
+      opacity: 0.55;
+    }
+  }
+  /* A section's words arrive one after another, and its points follow. */
+  .landing[data-motion] .split__text > :not(.rv) {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s var(--out), transform 0.7s var(--out);
+    transition-delay: 80ms;
+  }
+  .landing[data-motion] .split__text[data-in] > * {
+    opacity: 1;
+    transform: none;
+  }
+  .landing[data-motion] .split__text > :nth-child(2) {
+    transition-delay: 170ms;
+  }
+  .landing[data-motion] .split__text > :nth-child(3) {
+    transition-delay: 260ms;
+  }
+  .landing[data-motion] .split__text > :nth-child(4) {
+    transition-delay: 350ms;
+  }
+  .landing[data-motion] .split__text > :nth-child(5) {
+    transition-delay: 440ms;
+  }
+  .landing[data-motion] .l-points li {
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: opacity 0.6s var(--out), transform 0.6s var(--out);
+    transition-delay: calc(420ms + var(--p, 0) * 110ms);
+  }
+  .landing[data-motion] .split__text[data-in] .l-points li {
+    opacity: 1;
+    transform: none;
+  }
+  .landing[data-motion] .l-points li:nth-child(2) {
+    --p: 1;
+  }
+  .landing[data-motion] .l-points li:nth-child(3) {
+    --p: 2;
+  }
+  @supports (animation-timeline: view()) {
+    /* The pictures drift against the scroll a little, so they sit a layer apart from the words. */
+    .landing[data-motion] .split__visual {
+      animation: drift linear both;
+      animation-timeline: view();
+      animation-range: entry 0% exit 100%;
+    }
+    @keyframes drift {
+      from {
+        translate: 0 26px;
+      }
+      to {
+        translate: 0 -26px;
+      }
+    }
+    /* A thin line along the top of the page that fills as you read down it. */
+    .landing[data-motion]::before {
+      content: "";
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 60;
+      height: 2px;
+      transform-origin: 0 50%;
+      background: linear-gradient(90deg, var(--brand), var(--long));
+      animation: read linear both;
+      animation-timeline: scroll(root);
+    }
+    @keyframes read {
+      from {
+        transform: scaleX(0);
+      }
+      to {
+        transform: scaleX(1);
+      }
+    }
+  }
+  /* The hero's chart is on screen from the start: it draws as soon as it is there. */
+  /* Every other picture draws when it scrolls into view. */
+  .landing[data-motion] .split__visual .wipe,
+  .landing[data-motion] .closing__panel .wipe {
+    clip-path: inset(0 100% 0 0);
+  }
+  .landing[data-motion] .split__visual[data-in] .wipe {
+    animation: wipe 1.6s linear 0.3s both;
+  }
+  .landing[data-motion] .closing__panel[data-in] .wipe {
+    animation: wipe 2.4s linear 0.4s both;
+  }
+  /* The story pictures put their marks on as the story reaches them, so each mark arrives with its own small entrance. */
+  .landing[data-motion] .fv__mark,
+  .landing[data-motion] .fv__note,
+  .landing[data-motion] .fv__dot,
+  .landing[data-motion] .rk__dot {
+    animation: appear 0.5s var(--out) both;
+  }
+  .landing[data-motion] .fv__dot::after {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border: 2px solid var(--brand);
+    border-radius: 50%;
+    animation: ring 1.2s var(--out) both;
+  }
+  /* Tiles and receipt lines come in one after another. */
+  .landing[data-motion] .vault,
+  .landing[data-motion] .rc__rows > div,
+  .landing[data-motion] .rc__total {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  .landing[data-motion] .split__visual[data-in] .vault,
+  .landing[data-motion] .split__visual[data-in] .rc__rows > div,
+  .landing[data-motion] .split__visual[data-in] .rc__total {
+    opacity: 1;
+    transform: none;
+    transition: opacity 0.6s var(--out) calc(var(--k, 0) * 110ms + 0.3s), transform 0.6s var(--out) calc(var(--k, 0) * 110ms + 0.3s);
+  }
+
+  /* ---------- Alive: what moves because a print landed, or while a picture is on screen ---------- */
+  /* A new print: the price flashes its direction, and a ring leaves the end of the line. */
+  /* The bands fade in one after another, then scroll for as long as the first screen is in view. */
+  .landing[data-motion] .livefield__band {
+    animation: appear 1.2s var(--out) calc(0.3s + var(--k) * 0.18s) both;
+  }
+  .landing[data-motion] .livefield__chart {
+    animation: band-left calc(42s + var(--k) * 9s) linear infinite;
+    animation-play-state: paused;
+  }
+  .landing[data-motion] .livefield__band[data-way="right"] .livefield__chart {
+    animation-name: band-right;
+  }
+  .landing[data-motion] .livefield[data-playing] .livefield__chart {
+    animation-play-state: running;
+  }
+  .landing[data-motion] .livefield__glint {
+    display: block;
+    -webkit-mask: linear-gradient(100deg, transparent 38%, #000 50%, transparent 62%) 120% 0 / 300% 100% no-repeat;
+    mask: linear-gradient(100deg, transparent 38%, #000 50%, transparent 62%) 120% 0 / 300% 100% no-repeat;
+    animation: glint calc(5.5s + var(--k) * 0.9s) var(--ease) calc(var(--k) * -1.6s) infinite;
+    animation-play-state: paused;
+  }
+  .landing[data-motion] .livefield[data-playing] .livefield__glint {
+    animation-play-state: running;
+  }
+  @keyframes glint {
+    from {
+      -webkit-mask-position: 120% 0;
+      mask-position: 120% 0;
+    }
+    70%,
+    to {
+      -webkit-mask-position: -20% 0;
+      mask-position: -20% 0;
+    }
+  }
+  @keyframes band-left {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @keyframes band-right {
+    from {
+      transform: translateX(-50%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+  .landing[data-motion] .quotes__px[data-tick="up"] {
+    animation: tick-up 900ms var(--ease);
+  }
+  .landing[data-motion] .quotes__px[data-tick="down"] {
+    animation: tick-down 900ms var(--ease);
+  }
+  /* The print that just landed on the tape lights up and fades back. */
+  .landing[data-motion] .tape__tick[data-new] {
+    animation: tape-in 2.4s var(--out) both;
+  }
+  @keyframes tape-in {
+    from {
+      background: color-mix(in srgb, var(--brand) 16%, transparent);
+    }
+  }
+  /* The receipt feeds out of the printer a line at a time. */
+  .landing[data-motion] .rc {
+    clip-path: inset(0 0 100% 0);
+  }
+  .landing[data-motion] .split__visual[data-in] .rc {
+    animation: feed 1.4s steps(9, end) 0.2s both;
+  }
+  @keyframes feed {
+    from {
+      clip-path: inset(0 0 100% 0);
+    }
+    to {
+      clip-path: inset(0 0 0 0);
+    }
+  }
+  /* ---------- Narrow screens ---------- */
+  @media (max-width: 900px) {
+    .hero__title span {
+      white-space: normal;
+    }
+    .hero__in,
+    .split__in,
+    .split--flip .split__in {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .split--flip .split__text,
+    .split--flip .split__visual {
+      order: 0;
+    }
+    /* One column: the headline and the sentence stack with the same gap as in every other section. */
+    #modes .split__text {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    #modes .l-title {
+      grid-row: auto;
+    }
+    #modes .l-lede {
+      margin-top: var(--s-4);
+    }
+    /* Narrow, the faded middle widens with the words. */
+    .livefield:not(.livefield--ripple) {
+      -webkit-mask: radial-gradient(80% 40% at 50% 38%, rgba(0, 0, 0, 0.05) 55%, #000 100%);
+      mask: radial-gradient(80% 40% at 50% 38%, rgba(0, 0, 0, 0.05) 55%, #000 100%);
+    }
+  }
+  @media (max-width: 560px) {
+    .stage {
+      padding: var(--s-5);
+    }
+    /* The plot is narrow, so the marks take their short names and the note leaves; the caption says the same. */
+    .fv__long,
+    .fv__note {
+      display: none;
+    }
+    .fv__short {
+      display: inline;
+    }
+    .vaults {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    /* Stacked, the planned vaults need no height to line up with their neighbours. */
+    .vault {
+      min-height: 0;
+    }
+    .live__in {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .live__item:nth-child(3) {
+      padding-left: 0;
+      border-left: 0;
+    }
+    .live__item:nth-child(n + 3) {
+      border-top: 1px solid var(--line);
+    }
+    .live__item {
+      padding: var(--s-3) var(--s-4);
+    }
+    .live__item dd {
+      font-size: 1.25rem;
+    }
+    /* Narrow, a print is its market, price and move; the index leaves. */
+    .tape__tick {
+      width: 12rem;
+      padding-inline: var(--s-3);
+    }
+    .tape__idx {
+      display: none;
+    }
+  }
+}

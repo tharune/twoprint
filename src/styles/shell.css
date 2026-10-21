@@ -1,0 +1,555 @@
+@layer app {
+  /* ---------- Page frame ---------- */
+  .wrap {
+    --wrap-pad: var(--s-6);
+    width: 100%;
+    max-width: var(--w-app);
+    margin-inline: auto;
+    padding-inline: var(--wrap-pad);
+  }
+  .main {
+    flex: 1;
+    outline: none;
+  }
+  .main--app {
+    padding-block: var(--s-8) var(--s-18);
+  }
+  .inline-gap {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  /* ---------- Notice strip ---------- */
+  .strip {
+    background: var(--wash);
+    border-bottom: 1px solid var(--line);
+    color: var(--muted);
+    font-size: var(--fs-xs);
+    line-height: 1.45;
+  }
+  .strip__inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 2px var(--s-6);
+    max-width: var(--w-app);
+    margin-inline: auto;
+    padding: 0.4rem var(--s-6);
+  }
+  .strip strong {
+    color: var(--ink-2);
+    font-weight: 600;
+  }
+  .strip__synthetic {
+    color: var(--warn);
+    font-weight: 600;
+  }
+
+  /* ---------- Header ---------- */
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+    background: color-mix(in srgb, var(--paper) 90%, transparent);
+    -webkit-backdrop-filter: saturate(1.3) blur(10px);
+    backdrop-filter: saturate(1.3) blur(10px);
+    border-bottom: 1px solid var(--line);
+    transition: background-color var(--t-med) var(--ease), border-color var(--t-med) var(--ease);
+  }
+  .site-header[data-top="true"] {
+    background: transparent;
+    border-bottom-color: transparent;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    gap: var(--s-6);
+    max-width: var(--w-app);
+    height: var(--header-h);
+    margin-inline: auto;
+    padding-inline: var(--s-6);
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--ink);
+    font-size: 1.0625rem;
+    font-weight: 650;
+    letter-spacing: -0.025em;
+    text-decoration: none;
+  }
+  .site-nav {
+    --nav-pad: var(--s-3);
+    display: flex;
+    align-items: stretch;
+    align-self: stretch;
+    gap: var(--s-1);
+    margin-right: auto;
+  }
+  .site-nav a {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 var(--nav-pad);
+    color: var(--muted);
+    font-weight: 500;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color var(--t-fast) var(--ease);
+  }
+  .site-nav a:hover,
+  .site-nav a[aria-current="page"],
+  .site-nav__more:hover,
+  .site-nav__more[aria-current="page"] {
+    color: var(--ink);
+  }
+  .site-nav .pop {
+    display: flex;
+    align-items: stretch;
+  }
+  /* The links in the More menu are menu items, not tabs: the tab rules above would strip their padding. */
+  .site-nav .menu-item {
+    display: flex;
+    padding: 0.5rem 0.625rem;
+    color: var(--ink-2);
+  }
+  .site-nav .menu-item[aria-current="true"] {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .site-nav__more {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 var(--nav-pad);
+    color: var(--muted);
+    font-weight: 500;
+    transition: color var(--t-fast) var(--ease);
+  }
+  .site-nav__more .icon {
+    width: 14px;
+    height: 14px;
+  }
+  .site-nav__more[aria-current="page"]::after {
+    content: "";
+    position: absolute;
+    inset: auto var(--nav-pad) -1px;
+    height: 2px;
+    border-radius: 2px 2px 0 0;
+    background: var(--ink);
+  }
+  .site-nav a:focus-visible {
+    outline-offset: -4px; /* the links run the full height of the bar, so the ring sits inside them */
+    border-radius: var(--r-md);
+  }
+  .site-nav a[aria-current="page"]::after {
+    content: "";
+    position: absolute;
+    inset: auto var(--nav-pad) -1px;
+    height: 2px;
+    border-radius: 2px 2px 0 0;
+    background: var(--ink);
+  }
+  .site-header__end {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+    margin-left: auto;
+  }
+  /* On one row the controls keep their size: the bar gives way in the nav, which folds its minor pages, never in them. */
+  @media (min-width: 1041px) {
+    .site-header__end > * {
+      flex: none;
+    }
+  }
+  /* The network and the theme switch sit together, so a narrow header can move them as one. */
+  .site-header__tools {
+    display: flex;
+    align-items: center;
+    gap: var(--s-2);
+  }
+  .nav-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--warn);
+  }
+  .nav-dot[data-tier="CRITICAL"],
+  .nav-dot[data-tier="BREACHED"] {
+    background: var(--short);
+  }
+
+  /* Header controls: the network switcher and the account. Squared like every other control, not pills. */
+  .hctl {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 2rem;
+    padding: 0 var(--s-3);
+    border: 1px solid var(--line-2);
+    border-radius: var(--r-ctl);
+    background: transparent;
+    color: var(--ink-2);
+    font-size: var(--fs-sm);
+    font-weight: 550;
+    white-space: nowrap;
+    transition: background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+  }
+  .hctl:hover {
+    background: var(--wash);
+    border-color: var(--faint);
+  }
+  .hctl .icon {
+    width: 14px;
+    height: 14px;
+    color: var(--muted);
+  }
+  .hctl--account {
+    background: var(--slip);
+    color: var(--ink);
+  }
+  .hctl__bal {
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .menu-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-4);
+    padding: 0.375rem 0.625rem;
+    color: var(--muted);
+    font-size: var(--fs-sm);
+  }
+  .menu-row > :last-child {
+    color: var(--ink);
+    font-weight: 550;
+  }
+  .menu-note {
+    padding: 0.375rem 0.625rem;
+    color: var(--muted);
+    font-size: var(--fs-xs);
+    line-height: 1.4;
+  }
+  .menu-head__addr {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+  .menu-head__addr .icon-btn {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  /* ---------- Footer ---------- */
+  .site-footer {
+    --footer-ink: var(--ink);
+    --footer-muted: var(--muted);
+    --footer-line: var(--line);
+    margin-top: auto;
+    padding-block: var(--s-8);
+    border-top: 1px solid var(--line);
+    color: var(--footer-muted);
+    font-size: var(--fs-base);
+  }
+  .site-footer__inner {
+    max-width: var(--w-app);
+    margin-inline: auto;
+    padding-inline: var(--s-6);
+  }
+  .site-footer__top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-3) var(--s-10);
+  }
+  .site-footer .brand {
+    color: var(--footer-ink);
+    font-size: 1.0625rem;
+  }
+  .site-footer__bottom {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: var(--s-4) var(--s-10);
+    margin-top: var(--s-5);
+    font-size: var(--fs-xs);
+    line-height: 1.7;
+  }
+  .site-footer__fine {
+    max-width: 78ch;
+    margin: 0;
+  }
+  .site-footer__nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-3) var(--s-6);
+  }
+  .site-footer__group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-1) var(--s-5);
+  }
+  .site-footer__group + .site-footer__group {
+    padding-inline-start: var(--s-6);
+    border-inline-start: 1px solid var(--footer-line);
+  }
+  .site-footer__nav a,
+  .site-footer__nav .linklike {
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.75rem;
+    color: var(--footer-muted);
+    font: inherit;
+    text-decoration: none;
+    transition: color var(--t-fast) var(--ease);
+  }
+  .site-footer__nav a:hover,
+  .site-footer__nav .linklike:hover,
+  .site-footer__credit:hover {
+    color: var(--footer-ink);
+    text-decoration: none;
+  }
+  .site-footer__credit {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-1);
+    color: var(--footer-muted);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .site-footer__credit .icon {
+    width: 0.8125rem;
+    height: 0.8125rem;
+  }
+  .site-footer[data-tone="panel"] {
+    --footer-ink: var(--panel-fg);
+    --footer-muted: var(--panel-muted);
+    --footer-line: var(--panel-line);
+    --footer-gutter: clamp(1rem, 4vw, 2.5rem);
+    padding-top: 0;
+    border-top: 0;
+    background: var(--panel-bg);
+  }
+  .site-footer[data-tone="panel"] .site-footer__inner {
+    max-width: calc(var(--w-landing) + var(--footer-gutter) * 2);
+    padding-inline: var(--footer-gutter);
+  }
+  .site-footer[data-tone="panel"] .brand svg {
+    --ink: var(--panel-fg);
+    --carbon: var(--panel-accent);
+  }
+  .site-footer[data-tone="panel"] .site-footer__top {
+    padding-top: var(--s-6);
+    border-top: 1px solid var(--footer-line);
+  }
+  @media (max-width: 700px) {
+    .site-footer__top {
+      display: grid;
+      gap: var(--s-4);
+    }
+    .site-footer__nav {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: start;
+      gap: var(--s-6);
+    }
+    .site-footer__group {
+      display: grid;
+      justify-items: start;
+      gap: 0;
+    }
+    .site-footer__group + .site-footer__group {
+      padding-inline-start: 0;
+      border-inline-start: 0;
+    }
+    .site-footer__bottom {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+  .addr-list {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .addr-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-4);
+    padding: 0.625rem 0;
+    border-bottom: 1px solid var(--line);
+    font-size: var(--fs-sm);
+  }
+  .addr-list li:last-child {
+    border-bottom: 0;
+  }
+  .addr-list li > span {
+    color: var(--muted);
+  }
+
+  /* ---------- Page headers and sections ---------- */
+  .page-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: var(--s-4) var(--s-8);
+    padding-bottom: var(--s-8);
+  }
+  .page-head__title {
+    font-size: var(--fs-xl);
+    letter-spacing: -0.03em;
+  }
+  .page-head__lede {
+    max-width: 44rem;
+    margin-top: var(--s-2);
+    color: var(--muted);
+    font-size: var(--fs-md);
+    line-height: 1.55;
+  }
+  .page-head__actions {
+    display: flex;
+    gap: var(--s-2);
+    flex-wrap: wrap;
+  }
+  .gate {
+    max-width: 40rem;
+    padding-block: var(--s-14);
+  }
+  .gate-notice {
+    padding-top: var(--s-6);
+  }
+  .gate__title {
+    font-size: var(--fs-xl);
+    letter-spacing: -0.03em;
+  }
+  .gate__lede {
+    margin: var(--s-3) 0 var(--s-6);
+    color: var(--muted);
+    font-size: var(--fs-md);
+  }
+  .gate__actions {
+    margin-top: var(--s-6);
+  }
+  .gate__fine {
+    margin-top: var(--s-6);
+    color: var(--muted);
+    font-size: var(--fs-sm);
+  }
+
+  .site-header__break {
+    display: none;
+  }
+  /* The balance in the account button is the first thing to go when the bar runs short. */
+  @media (max-width: 1179px) {
+    .hctl__bal {
+      display: none;
+    }
+  }
+  /* A window too narrow for one row: the brand and the controls on top, the pages and the layout switch beneath. The app's header
+     has the most in it, so it wraps first. */
+  @media (max-width: 1040px) {
+    .site-header__inner:not(.site-header__inner--home) {
+      flex-wrap: wrap;
+      height: auto;
+      row-gap: 0;
+      column-gap: var(--s-3);
+      padding-top: var(--s-2);
+    }
+    .site-header__inner:not(.site-header__inner--home) .brand {
+      order: 1;
+      height: 2.5rem;
+      margin-right: auto;
+    }
+    .site-header__inner:not(.site-header__inner--home) .site-header__end {
+      display: contents;
+    }
+    .site-header__inner:not(.site-header__inner--home) .site-header__end > * {
+      order: 2;
+    }
+    .site-header__inner:not(.site-header__inner--home) .site-header__break {
+      display: block;
+      order: 3;
+      flex: 0 0 100%;
+      height: 0;
+    }
+    .site-header__inner:not(.site-header__inner--home) .site-nav {
+      order: 4;
+      flex: 0 1 auto;
+      height: 2.5rem;
+      margin-inline: calc(var(--nav-pad) * -1) auto;
+    }
+    .site-header__inner:not(.site-header__inner--home) .site-header__end > .mode {
+      order: 5;
+      margin-left: auto;
+    }
+    .hctl__bal {
+      display: none;
+    }
+  }
+  @media (max-width: 640px) {
+    .site-nav {
+      --nav-pad: var(--s-2);
+    }
+  }
+  /* On a phone the logo stands for the name. The first row holds the layout switch and the wallet; the second, the pages with the
+     network and theme controls at its end. */
+  @media (max-width: 480px) {
+    .site-header .brand span {
+      display: none;
+    }
+    .site-header__inner:not(.site-header__inner--home) .site-header__end > .mode {
+      order: 2;
+      margin-left: 0;
+    }
+    .site-header__inner:not(.site-header__inner--home) .site-header__end > .site-header__tools {
+      order: 6;
+    }
+    /* Close the spacing up so the pages and the controls share a row down to a 360 px screen. */
+    .site-header__inner:not(.site-header__inner--home) {
+      column-gap: var(--s-2);
+    }
+    .site-nav {
+      gap: 0;
+    }
+    .site-header .hctl {
+      padding-inline: var(--s-2);
+    }
+    .site-header .seg--sm .seg__opt {
+      padding-inline: 0.625rem;
+    }
+    .hctl--net .hctl__label {
+      display: none;
+    }
+    .wrap {
+      --wrap-pad: var(--s-4);
+    }
+    .site-header__inner,
+    .site-footer__inner,
+    .strip__inner {
+      padding-inline: var(--s-4);
+    }
+    .main--app {
+      padding-block: var(--s-5) var(--s-14);
+    }
+  }
+  @media (max-width: 380px) {
+    .site-header .site-nav {
+      --nav-pad: 0.375rem;
+      font-size: 0.9375rem;
+    }
+    .site-nav__more .icon {
+      display: none;
+    }
+  }
+}

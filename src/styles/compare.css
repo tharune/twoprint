@@ -1,0 +1,263 @@
+@layer app {
+  /* ---------- Twoprint vs Papertrade ---------- */
+  .compare {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-14);
+    padding-bottom: var(--s-14);
+  }
+  .cmp-h2 {
+    font-size: var(--fs-lg);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .cmp-sub {
+    margin-top: var(--s-2);
+    color: var(--muted);
+    font-size: var(--fs-sm);
+    max-width: 52rem;
+  }
+  .cmp-calc {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-6);
+  }
+  .cmp-inputs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--s-5) var(--s-6);
+  }
+  /* A field is a grid of its label and control: without this its spare height is shared out between them. */
+  .cmp-inputs .field {
+    align-content: start;
+  }
+  .cmp-inputs .chips {
+    margin-top: var(--s-2);
+    flex-wrap: wrap;
+  }
+  .cmp-results {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-6);
+  }
+  .cmp-venue {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    gap: var(--s-4);
+    padding: var(--s-5);
+    background: var(--slip);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    min-width: 0;
+  }
+  .cmp-venue__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-3);
+  }
+  .cmp-venue__head h3 {
+    font-size: var(--fs-lg);
+    font-weight: 600;
+  }
+  .cmp-venue__src,
+  .cmp-venue__foot,
+  .cmp-venue__warn {
+    color: var(--muted);
+    font-size: var(--fs-xs);
+    line-height: 1.5;
+  }
+  .cmp-venue__warn {
+    color: var(--warn);
+  }
+  .cmp-venue__na {
+    padding: var(--s-4);
+    background: var(--wash);
+    border-radius: var(--r-md);
+    color: var(--ink-2);
+  }
+  .cmp-venue__kept {
+    display: grid;
+    gap: var(--s-1);
+  }
+  .cmp-venue__label {
+    color: var(--muted);
+    font-size: var(--fs-sm);
+  }
+  .cmp-venue__kept strong {
+    font-size: var(--fs-2xl);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.02em;
+  }
+  .cmp-venue__pct {
+    color: var(--ink-2);
+    font-variant-numeric: tabular-nums;
+  }
+  .cmp-verdict {
+    padding: var(--s-4) var(--s-5);
+    background: var(--carbon-soft);
+    border: 1px solid var(--carbon-line);
+    border-radius: var(--r-md);
+    color: var(--ink);
+  }
+  .cmp-conditions {
+    display: grid;
+    gap: var(--s-2);
+    color: var(--ink-2);
+    font-size: var(--fs-sm);
+    line-height: 1.55;
+  }
+  .cmp-conditions h3 {
+    color: var(--ink);
+    font-size: var(--fs-base);
+    font-weight: 600;
+  }
+  .cmp-conditions ul,
+  .cmp-push__m2 ul {
+    display: grid;
+    gap: var(--s-1);
+    padding-left: 1.1rem;
+    list-style: disc;
+  }
+  .cmp-outside {
+    color: var(--warn);
+  }
+  .cmp-table .table-wrap {
+    margin-top: var(--s-5);
+  }
+  .cmp-grid {
+    min-width: 60rem;
+  }
+  .cmp-grid th[scope="row"] {
+    padding: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+    vertical-align: top;
+    text-align: left;
+  }
+  .cmp-grid td {
+    vertical-align: top;
+    line-height: 1.5;
+    white-space: normal;
+  }
+  .cmp-grid td:last-child {
+    min-width: 18rem;
+  }
+  .cmp-grid__verdict {
+    display: block;
+    margin-top: var(--s-2);
+  }
+  .cmp-push {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-5);
+  }
+  .cmp-push__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-3);
+  }
+  .cmp-push .cmp-sub {
+    margin-top: 0;
+  }
+  .cmp-push__cap line {
+    stroke: var(--line-2);
+    stroke-dasharray: 2 4;
+  }
+  .cmp-push__cap text {
+    fill: var(--faint);
+    font-size: 11px;
+  }
+  .cmp-push__pt {
+    fill: none;
+    stroke: var(--short);
+    stroke-width: 2;
+  }
+  .cmp-push__tp {
+    fill: var(--carbon);
+  }
+  .cmp-push__axis {
+    fill: var(--faint);
+    font-size: 11px;
+  }
+  .cmp-push__legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2) var(--s-5);
+    color: var(--muted);
+    font-size: var(--fs-xs);
+  }
+  .cmp-push__legend .sw {
+    display: inline-block;
+    width: 14px;
+    height: 0;
+    margin-right: var(--s-1);
+    vertical-align: middle;
+    border-top: 2px solid var(--ink);
+  }
+  .cmp-push__legend .sw--oracle {
+    border-top: 2px dashed var(--faint);
+  }
+  .cmp-push__legend .mk {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-right: var(--s-1);
+    vertical-align: middle;
+  }
+  .cmp-push__legend .mk--pt {
+    border: 2px solid var(--short);
+    border-radius: 50%;
+  }
+  .cmp-push__legend .mk--tp {
+    background: var(--carbon);
+    transform: rotate(45deg) scale(0.8);
+  }
+  .cmp-push__read {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: var(--s-3);
+  }
+  .cmp-push__read dt {
+    color: var(--muted);
+    font-size: var(--fs-xs);
+  }
+  .cmp-push__read dd {
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+  }
+  .cmp-push__m2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--s-6);
+    color: var(--ink-2);
+    font-size: var(--fs-sm);
+    line-height: 1.55;
+  }
+  .cmp-push__m2 h3 {
+    margin-bottom: var(--s-2);
+    color: var(--ink);
+    font-size: var(--fs-base);
+    font-weight: 600;
+  }
+  @media (max-width: 900px) {
+    .cmp-inputs {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .cmp-results,
+    .cmp-push__m2 {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .cmp-push__read {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 560px) {
+    .cmp-inputs {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+}
