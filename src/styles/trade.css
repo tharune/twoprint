@@ -1,0 +1,694 @@
+@layer trade {
+  /* ---------- The page ---------- */
+  .trade {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-4);
+  }
+  .trade > * {
+    min-width: 0;
+  }
+  .tcard {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-4);
+    padding: var(--s-5);
+  }
+  /* The chart and your positions on the left, the ticket on the right. Both layouts use it. On a narrow screen they stack: chart, ticket, positions. */
+  .tgrid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 24rem;
+    grid-template-areas:
+      "chart side"
+      "list side";
+    grid-template-rows: 1fr auto;
+    gap: var(--s-4);
+    align-items: stretch;
+  }
+  /* The chart takes whatever height the ticket leaves it, so the two columns end together. */
+  .tgrid__chart {
+    grid-area: chart;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .tgrid__chart > * {
+    flex: 1 1 auto;
+  }
+  .tgrid__list {
+    grid-area: list;
+    align-self: start;
+    min-width: 0;
+  }
+  .tgrid__side {
+    grid-area: side;
+    align-self: start;
+    position: sticky;
+    top: calc(var(--header-h) + var(--s-4));
+    min-width: 0;
+  }
+
+  /* ---------- The market bar ---------- */
+  .mbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-3) var(--s-8);
+    padding: var(--s-3) var(--s-5);
+  }
+  .mbar__lead {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-3) var(--s-5);
+  }
+  .mpick {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+    height: 2.5rem;
+    padding: 0 var(--s-3) 0 var(--s-4);
+    border: 1px solid var(--line-2);
+    border-radius: var(--r-ctl);
+    background: var(--slip);
+    transition: background var(--t-fast) var(--ease), border-color var(--t-fast) var(--ease);
+  }
+  .mpick:hover {
+    background: var(--wash);
+    border-color: var(--faint);
+  }
+  .mpick__sym {
+    font-size: var(--fs-md);
+    font-weight: 650;
+    letter-spacing: -0.01em;
+  }
+  .mpick__name {
+    color: var(--muted);
+    font-size: var(--fs-sm);
+  }
+  .mpick .icon {
+    width: 14px;
+    height: 14px;
+    color: var(--muted);
+  }
+
+  .quote {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--s-2) var(--s-3);
+  }
+  .quote__px {
+    border-radius: 8px;
+    font-size: 1.875rem;
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .quote__px[data-tick="up"] {
+    animation: tick-up 900ms var(--ease);
+  }
+  .quote__px[data-tick="down"] {
+    animation: tick-down 900ms var(--ease);
+  }
+  @keyframes tick-up {
+    from {
+      color: var(--long);
+    }
+  }
+  @keyframes tick-down {
+    from {
+      color: var(--short);
+    }
+  }
+  .quote__meta {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--s-2);
+    font-size: var(--fs-sm);
+  }
+
+  /* What sits beside the price: a few readings, each a label over a value, set apart by a hairline. */
+  .mstats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-3) 0;
+    margin: 0;
+  }
+  .mstats > div {
+    display: grid;
+    gap: 2px;
+    min-width: 0;
+    padding-inline: var(--s-5);
+    border-left: 1px solid var(--line);
+  }
+  .mstats > div:first-child {
+    border-left: 0;
+  }
+  .mstats dt {
+    color: var(--muted);
+    font-size: var(--fs-xs);
+    font-weight: 500;
+  }
+  .mstats dd {
+    margin: 0;
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .oracle-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .mnote {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--s-2);
+    color: var(--muted);
+    font-size: var(--fs-sm);
+  }
+  .mnote .icon {
+    margin-top: 0.2em;
+  }
+
+  /* ---------- The market picker ---------- */
+  .pop__panel--picker {
+    width: min(42rem, calc(100vw - 2rem));
+    padding: 0;
+    overflow: hidden;
+  }
+  .picker__search {
+    display: flex;
+    align-items: center;
+    gap: var(--s-3);
+    height: 3rem;
+    padding: 0 var(--s-4);
+    border-bottom: 1px solid var(--line);
+  }
+  .picker__search .icon {
+    flex: none;
+    width: 16px;
+    height: 16px;
+    color: var(--muted);
+  }
+  .picker__search input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    box-shadow: none;
+    font-size: var(--fs-base);
+  }
+  .picker__search input::placeholder {
+    color: var(--faint);
+  }
+  .picker__clear {
+    display: grid;
+    place-items: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 6px;
+    color: var(--muted);
+  }
+  .picker__clear:hover {
+    background: var(--wash);
+    color: var(--ink);
+  }
+  .picker__clear .icon {
+    width: 12px;
+    height: 12px;
+  }
+  .picker__tabs {
+    padding: 0 var(--s-4);
+    border-bottom: 1px solid var(--line);
+  }
+  .picker__tabs .tabs {
+    gap: var(--s-5);
+  }
+  .picker__tabs .tabs__tab {
+    height: 2.5rem;
+    font-size: var(--fs-sm);
+  }
+  .picker__head,
+  .picker__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr) 4.5rem 4.5rem 6rem;
+    align-items: center;
+    gap: var(--s-3);
+    padding-inline: var(--s-4);
+  }
+  .picker__head {
+    padding-block: var(--s-2);
+    color: var(--muted);
+    font-size: var(--fs-xs);
+    font-weight: 500;
+  }
+  .picker__head > :nth-child(n + 2),
+  .picker__row > :nth-child(n + 2) {
+    text-align: right;
+  }
+  .picker__list {
+    max-height: min(22rem, 52vh);
+    overflow-y: auto;
+    padding-bottom: var(--s-2);
+  }
+  .picker__row {
+    width: 100%;
+    min-height: 2.75rem;
+    border-radius: 0;
+    font-size: var(--fs-sm);
+    text-align: left;
+    font-variant-numeric: tabular-nums;
+    transition: background var(--t-fast) var(--ease);
+  }
+  .picker__row:hover,
+  .picker__row:focus-visible {
+    background: var(--wash);
+  }
+  .picker__row:focus-visible {
+    outline-offset: -2px;
+  }
+  .picker__row[aria-current="true"] {
+    background: var(--brand-soft);
+    box-shadow: inset 2px 0 0 var(--brand);
+  }
+  .picker__id {
+    display: flex;
+    align-items: baseline;
+    gap: var(--s-2);
+    min-width: 0;
+  }
+  .picker__id b {
+    font-size: var(--fs-base);
+    font-weight: 650;
+  }
+  .picker__id span {
+    overflow: hidden;
+    color: var(--muted);
+    font-size: var(--fs-xs);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .picker__id em {
+    flex: none;
+    color: var(--faint);
+    font-size: var(--fs-xs);
+    font-style: normal;
+  }
+  .picker__px {
+    font-weight: 600;
+  }
+  .picker__chg {
+    color: var(--muted);
+  }
+  .picker__chg.is-up {
+    color: var(--long);
+  }
+  .picker__chg.is-down {
+    color: var(--short);
+  }
+  .picker__none {
+    padding: var(--s-5) var(--s-4);
+    color: var(--muted);
+    font-size: var(--fs-sm);
+  }
+
+  /* ---------- Charts ---------- */
+  .chartpanel {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .chartpanel__body {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    min-height: 0;
+    padding: var(--s-1) var(--s-4) var(--s-4);
+  }
+  /* The embed sits in a frame of its own, clear of the panel's edges and rounded to match. It grows with the column. */
+  .chartpanel__frame {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 30rem;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--r-ctl);
+    background: var(--slip);
+  }
+  .chartpanel .chart {
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  .chartpanel__foot {
+    padding: var(--s-3) var(--s-1) 0;
+    color: var(--muted);
+    font-size: var(--fs-xs);
+    line-height: 1.5;
+  }
+  .chartpanel__pinned {
+    padding: var(--s-2) var(--s-1) var(--s-3);
+    font-size: var(--fs-sm);
+  }
+  /* Keep depth and positions together above the space left by the longer ticket. */
+  @media (min-width: 981px) {
+    .tgrid:has(.depthchart) {
+      grid-template-rows: auto 1fr;
+    }
+  }
+
+  /* The Basic price chart. */
+  .pchart {
+    display: flex;
+    flex-direction: column;
+    padding: var(--s-4) var(--s-5) var(--s-3);
+  }
+  .pchart__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-2) var(--s-4);
+    margin-bottom: var(--s-3);
+  }
+  .pchart__src {
+    color: var(--muted);
+    font-size: var(--fs-sm);
+  }
+  /* Ten timeframes are wider than a phone: they scroll sideways, without a bar, and the one picked is kept in view. */
+  .pchart__ranges {
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: auto;
+    border-radius: var(--r-ctl);
+    scrollbar-width: none;
+  }
+  .pchart__ranges::-webkit-scrollbar {
+    display: none;
+  }
+  .pchart__ranges .seg {
+    flex: none;
+  }
+  .pchart__plot {
+    position: relative;
+  }
+  .pchart__reset {
+    position: absolute;
+    top: var(--s-2);
+    left: var(--s-2);
+    z-index: 3;
+    background: var(--slip);
+  }
+  .tv {
+    position: absolute;
+    inset: 0;
+  }
+  .tv__host,
+  .tv__host .tradingview-widget-container__widget {
+    width: 100%;
+    height: 100%;
+  }
+  .tv__host {
+    position: absolute;
+    inset: 0;
+  }
+  .tv__state {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: var(--s-6);
+    color: var(--muted);
+    font-size: var(--fs-sm);
+    text-align: center;
+    pointer-events: none;
+  }
+
+  /* ---------- Positions ---------- */
+  .holdings .panel__body {
+    padding: 0 var(--s-5) var(--s-3);
+  }
+  .holdings .empty {
+    padding: var(--s-6) 0;
+  }
+  .cell-actions-col {
+    width: 1%;
+    white-space: nowrap;
+  }
+  .cell-sub--risk {
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+  .holdings .table--rows tbody tr[data-focused="true"] {
+    background: var(--brand-soft);
+  }
+  .holdings .table--rows tbody tr[data-focused="true"] td:first-child {
+    box-shadow: inset 2px 0 0 var(--brand);
+    padding-left: 0.5rem;
+  }
+
+  /* The basic layout's short list of open positions. */
+  .openstrip ul {
+    display: grid;
+  }
+  .orow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-4);
+    width: 100%;
+    padding: var(--s-3) var(--s-5);
+    border-top: 1px solid var(--line);
+    text-align: left;
+    transition: background var(--t-fast) var(--ease);
+  }
+  .openstrip li:first-child .orow {
+    border-top: 0;
+  }
+  .orow:hover {
+    background: var(--wash);
+  }
+  .orow:focus-visible {
+    outline-offset: -2px;
+  }
+  .orow__what,
+  .orow__pnl {
+    display: grid;
+    gap: 2px;
+  }
+  .orow__pnl {
+    justify-items: end;
+    font-weight: 600;
+  }
+
+  /* ---------- A market the contracts do not carry ---------- */
+  .notlive {
+    display: grid;
+    justify-items: start;
+    gap: var(--s-3);
+    padding: var(--s-4) 0;
+  }
+  .notlive__title {
+    font-size: var(--fs-lg);
+    letter-spacing: -0.02em;
+  }
+  .notlive p {
+    color: var(--ink-2);
+    line-height: 1.55;
+  }
+  .notlive__alts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-2);
+    padding-top: var(--s-2);
+  }
+
+  /* ---------- How an order fills ---------- */
+  .rules {
+    display: grid;
+  }
+  .rules li {
+    display: grid;
+    grid-template-columns: 1.75rem minmax(0, 1fr);
+    gap: var(--s-4);
+    padding: var(--s-4) 0;
+    border-top: 1px solid var(--line);
+  }
+  .rules li:first-child {
+    padding-top: 0;
+    border-top: 0;
+  }
+  .rules__n {
+    display: grid;
+    place-items: center;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 6px;
+    background: var(--brand-soft);
+    color: var(--brand-strong);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+  }
+  .rules h3 {
+    font-size: var(--fs-md);
+    letter-spacing: -0.01em;
+  }
+  .rules p {
+    margin-top: 2px;
+    color: var(--ink-2);
+    font-size: var(--fs-sm);
+    line-height: 1.55;
+  }
+  .rules__rule {
+    padding: var(--s-4) 0;
+    border-top: 1px solid var(--line);
+  }
+  .rules__rule h3 {
+    font-size: var(--fs-md);
+    letter-spacing: -0.01em;
+  }
+  .rules__rule p {
+    margin-top: 2px;
+    color: var(--ink-2);
+    font-size: var(--fs-sm);
+    line-height: 1.55;
+  }
+  .rules__fine {
+    padding-top: var(--s-4);
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: var(--fs-sm);
+    line-height: 1.55;
+  }
+
+  /* ---------- Local node tools ---------- */
+  .bench {
+    margin-top: var(--s-8);
+    border-top: 1px solid var(--line);
+  }
+  .bench__body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--s-3);
+    padding-top: var(--s-2);
+  }
+  .bench__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    gap: var(--s-2);
+  }
+  .bench__status,
+  .bench__fine,
+  .bench__msg {
+    color: var(--muted);
+    font-size: var(--fs-sm);
+  }
+  .bench__msg {
+    color: var(--ink-2);
+  }
+
+  @media (max-width: 1180px) {
+    .mstats > div {
+      padding-inline: var(--s-4);
+    }
+  }
+  @media (max-width: 1100px) {
+    .holdings .table th:not(:first-child):not(:last-child),
+    .holdings .table td:not(:first-child):not(:last-child) {
+      padding-inline: 0.5rem;
+    }
+  }
+  /* Below this the chart and the ticket no longer fit side by side: they stack, each the width of the page. */
+  @media (max-width: 980px) {
+    .tgrid {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas:
+        "chart"
+        "side"
+        "list";
+      grid-template-rows: auto;
+    }
+    .chartpanel__frame {
+      min-height: 26rem;
+    }
+    .tgrid__side {
+      position: static;
+      width: 100%;
+    }
+  }
+  @media (max-width: 640px) {
+    .tcard {
+      padding: var(--s-4);
+    }
+    /* On a phone the action stays on screen while the summary scrolls beneath it. */
+    .trade[data-mode="basic"] .ticket__act {
+      position: sticky;
+      bottom: 0;
+      z-index: 5;
+      margin: 0 calc(var(--s-4) * -1) calc(var(--s-4) * -1);
+      padding: var(--s-3) var(--s-4) calc(var(--s-3) + env(safe-area-inset-bottom));
+      background: var(--slip);
+      border-top: 1px solid var(--line);
+      border-radius: 0 0 var(--r-panel) var(--r-panel);
+    }
+    .quote__px {
+      font-size: 2.125rem;
+    }
+    .mbar {
+      padding: var(--s-3) var(--s-4);
+    }
+    .mbar .mstats {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--s-3) var(--s-5);
+      width: 100%;
+    }
+    .mstats > div {
+      padding-inline: 0;
+      border-left: 0;
+    }
+    .picker__head,
+    .picker__row {
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr) 4.25rem;
+    }
+    .picker__hide-sm {
+      display: none;
+    }
+    .pchart {
+      padding: var(--s-3) var(--s-4) var(--s-2);
+    }
+    .pchart__ranges {
+      width: 100%;
+    }
+    .chartpanel__frame {
+      min-height: 24rem;
+    }
+    .holdings .panel__body {
+      padding-inline: var(--s-4);
+    }
+    /* The lists keep what identifies an order and how it is doing; the rest is in the order dialog, a tap away. */
+    .holdings .hide-sm {
+      display: none;
+    }
+    .holdings .table {
+      min-width: 0;
+    }
+    .holdings .table--rows td:first-child {
+      min-width: 0;
+    }
+    .orow {
+      padding-inline: var(--s-4);
+    }
+  }
+}

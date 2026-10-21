@@ -1,0 +1,277 @@
+@layer trade {
+  /* ---------- Chart ---------- */
+  .chart {
+    position: relative;
+    background: var(--slip);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    overflow: hidden;
+  }
+  .chart svg {
+    display: block;
+    touch-action: pan-y;
+  }
+  .chart__empty {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    place-items: center;
+    color: var(--muted);
+  }
+  .chart__grid line {
+    stroke: var(--chart-grid);
+  }
+  .chart__grid text,
+  .chart__entry text,
+  .chart__level text,
+  .chart__pinned text {
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+  }
+  .chart__grid text {
+    fill: var(--muted);
+  }
+  .chart__line {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 1.5;
+    stroke-linejoin: round;
+  }
+  .chart__dot {
+    fill: var(--ink);
+  }
+  .chart__now {
+    fill: var(--ink);
+  }
+  .chart__now-ring {
+    fill: var(--ink);
+    opacity: 0.12;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: ring 2.4s var(--ease) infinite;
+  }
+  .chart__ghost {
+    fill: var(--carbon-soft);
+    opacity: 0.6;
+  }
+  .chart__gdot {
+    fill: var(--slip);
+    stroke: var(--carbon);
+    stroke-width: 1.5;
+    stroke-dasharray: 2.5 2;
+  }
+  .chart__entry line {
+    stroke: var(--muted);
+    stroke-dasharray: 4 4;
+  }
+  .chart__entry text {
+    fill: var(--muted);
+  }
+  .chart__level line {
+    stroke: var(--short);
+    stroke-width: 1.25;
+    stroke-dasharray: 5 4;
+  }
+  .chart__level text,
+  .chart__pinned text {
+    fill: var(--short);
+    font-weight: 600;
+  }
+  .chart__mline {
+    stroke-width: 1;
+  }
+  .chart__mline--commit {
+    stroke: var(--carbon);
+  }
+  .chart__mline--fill {
+    stroke: var(--ink);
+  }
+  .chart__mline--breach {
+    stroke: var(--short);
+  }
+  .chart__mline--step {
+    stroke: var(--line-2);
+    stroke-dasharray: 3 3;
+  }
+  .chart__tag rect {
+    fill: var(--ink);
+  }
+  .chart__tag text {
+    fill: var(--paper);
+    font-size: 10.5px;
+    font-weight: 600;
+  }
+  .chart__tag--commit rect {
+    fill: var(--carbon);
+  }
+  .chart__tag--commit text {
+    fill: #fff;
+  }
+  :root[data-theme="dark"] .chart__tag--commit:not(.chart__tag--ghost) text {
+    fill: var(--paper);
+  }
+  .chart__tag--breach rect {
+    fill: var(--short);
+  }
+  .chart__tag--breach text {
+    fill: #fff;
+  }
+  :root[data-theme="dark"] .chart__tag--breach:not(.chart__tag--ghost) text {
+    fill: var(--paper);
+  }
+  .chart__tag--step rect {
+    fill: var(--slip);
+    stroke: var(--line-2);
+  }
+  .chart__tag--step text {
+    fill: var(--muted);
+  }
+  .chart__hit {
+    fill: transparent;
+    cursor: crosshair;
+  }
+  .chart__hover line {
+    stroke: var(--line-2);
+  }
+  .chart__hover circle {
+    fill: var(--slip);
+    stroke: var(--ink);
+    stroke-width: 2;
+  }
+  .chart__tip {
+    position: absolute;
+    width: 12.5rem;
+    padding: 0.5rem 0.625rem;
+    border-radius: var(--r-md);
+    background: var(--ink);
+    color: var(--paper);
+    font-size: var(--fs-xs);
+    pointer-events: none;
+    box-shadow: var(--shadow-pop);
+  }
+  .chart__tip-head {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+  .chart__tip-head span {
+    font-weight: 400;
+    opacity: 0.7;
+  }
+  .chart__tip dl {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+    margin: 0;
+  }
+  .chart__tip dl > div {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--s-3);
+  }
+  .chart__tip dt {
+    opacity: 0.7;
+  }
+  .chart__tip dd {
+    margin: 0;
+    font-weight: 550;
+  }
+  .chart__tip dd span {
+    opacity: 0.7;
+    font-weight: 400;
+  }
+
+  /* The chart: the print axis, previews of the draft, and the danger zone beyond the level. */
+  .chart__zone {
+    fill: var(--short-soft);
+    opacity: 0.6;
+  }
+  .chart__zone--draft {
+    opacity: 0.35;
+  }
+  .chart__ghost--draft {
+    opacity: 0.38;
+  }
+  .chart__mline--ghost {
+    stroke-dasharray: 3 3;
+    opacity: 0.8;
+  }
+  .chart__tag--ghost rect {
+    fill: var(--slip);
+    stroke: currentColor;
+    stroke-dasharray: 3 2;
+  }
+  .chart__tag--ghost text {
+    fill: currentColor;
+  }
+  .chart__tag--ghost.chart__tag--commit {
+    color: var(--carbon);
+  }
+  .chart__tag--ghost.chart__tag--fill {
+    color: var(--ink);
+  }
+  .chart__axis line {
+    stroke: var(--line-2);
+  }
+  .chart__axis .chart__baseline {
+    stroke: var(--line);
+  }
+  .chart__axis text {
+    fill: var(--faint);
+    font-size: 10.5px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* A value tag in the right gutter: solid for the live price, outlined for a reference line, red for the liquidation level. */
+  .chart__pill rect {
+    fill: var(--ink);
+  }
+  .chart__pill text {
+    fill: var(--paper);
+    font-size: 11px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .chart__pill--ref rect {
+    fill: var(--slip);
+    stroke: var(--line-2);
+  }
+  .chart__pill--ref text {
+    fill: var(--ink-2);
+  }
+  .chart__pill--level rect {
+    fill: var(--short-soft);
+    stroke: var(--short-line);
+  }
+  .chart__pill--level text {
+    fill: var(--short);
+  }
+  /* A marked print: a ring on the line, in the colour of its tag. */
+  .chart__level--draft line {
+    stroke-dasharray: 2 4;
+    opacity: 0.8;
+  }
+  .chart__level--draft text,
+  .chart__pinned--draft text {
+    opacity: 0.85;
+    font-weight: 500;
+  }
+  .chart__entry text,
+  .chart__level text,
+  .chart__pinned text {
+    paint-order: stroke;
+    stroke: var(--slip);
+    stroke-width: 3px;
+    stroke-linejoin: round;
+  }
+  @keyframes ring {
+    from {
+      transform: scale(0.7);
+      opacity: 0.3;
+    }
+    to {
+      transform: scale(1.9);
+      opacity: 0;
+    }
+  }
+}

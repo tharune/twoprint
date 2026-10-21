@@ -1,0 +1,178 @@
+@layer tokens {
+  :root {
+    --font: "Instrument Sans Variable", "Instrument Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+    /* Type scale */
+    --fs-xs: 0.75rem;
+    --fs-sm: 0.8125rem;
+    --fs-base: 0.875rem;
+    --fs-md: 1rem;
+    --fs-lg: 1.25rem;
+    --fs-xl: 1.75rem;
+    --fs-2xl: 2.5rem;
+    --fs-hero: clamp(2.75rem, 6.2vw, 4.75rem);
+
+    /* Spacing (4px base) */
+    --s-1: 0.25rem;
+    --s-2: 0.5rem;
+    --s-3: 0.75rem;
+    --s-4: 1rem;
+    --s-5: 1.25rem;
+    --s-6: 1.5rem;
+    --s-8: 2rem;
+    --s-10: 2.5rem;
+    --s-14: 3.5rem;
+    --s-18: 4.5rem;
+    --s-24: 6rem;
+
+    /* Radii by role: controls, panels, the slip, landing tiles */
+    --r-sm: 6px;
+    --r-md: 10px;
+    --r-lg: 16px;
+    --r-xl: 20px;
+    --r-2xl: 28px;
+    --r-pill: 999px;
+    /* Controls (buttons, inputs, selectors) and the panels the app's own screens are built from. */
+    --r-ctl: 8px;
+    --r-panel: 12px;
+
+    --w-app: 1320px;
+    --w-landing: 1120px;
+    --header-h: 3.5rem;
+
+    --ease: cubic-bezier(0.2, 0, 0, 1);
+    --t-fast: 120ms;
+    --t-med: 220ms;
+
+    color-scheme: light;
+
+    /*
+     * Twoprint's palette is one cool family in two lights. Daylight is mist, snow and a deep teal-black ink; the dark theme is
+     * the same hues turned down. The brand is a teal from the family Kinetiq uses (its brand-500 is #2d7388), so the app sits
+     * next to its host chain without borrowing anyone's layout. Long is green and short is red; the brand is never a trading
+     * colour, and nothing else on a page is allowed to be a second accent.
+     */
+    --paper: #f2f6f7;
+    --slip: #ffffff;
+    --wash: #e9f0f2;
+    --line: #dbe5e8;
+    --line-2: #c4d3d8;
+    --ink: #0a1c22;
+    --ink-2: #29414b;
+    --muted: #566c75;
+    --faint: #5f747c;
+
+    --brand: #2d7388;
+    --brand-strong: #1b4a58;
+    --brand-soft: #e1eff3;
+    --brand-line: #b3d4dd;
+    /* The cyan end of the ramp, for atmosphere and illustrations only. */
+    --brand-tint: #d3ecf4;
+    --brand-glow: #8ed4e9;
+
+    /* The earlier name for the brand colour, kept so existing rules keep working. */
+    --carbon: var(--brand);
+    --carbon-soft: var(--brand-soft);
+    --carbon-line: var(--brand-line);
+
+    --long: #25783f;
+    --long-hover: #1d6333;
+    --long-soft: #e5f1e8;
+    --long-line: #b8d8c2;
+    --short: #b4372c;
+    --short-hover: #9b2e24;
+    --short-soft: #fae8e5;
+    --short-line: #efc2ba;
+    --warn: #8a5304;
+    --warn-soft: #fbefd8;
+    --warn-line: #e8cf9b;
+
+    --btn-bg: var(--brand);
+    --btn-fg: #ffffff;
+    --btn-bg-hover: var(--brand-strong);
+    --on-long: #ffffff;
+    --on-short: #ffffff;
+
+    --shadow-xs: 0 1px 1px rgba(10, 28, 34, 0.05);
+    --shadow-pop: 0 1px 2px rgba(10, 28, 34, 0.06), 0 12px 32px -8px rgba(10, 28, 34, 0.2);
+    --shadow-slip: 0 1px 0 rgba(10, 28, 34, 0.04), 0 24px 48px -24px rgba(10, 28, 34, 0.28);
+    --shadow-card: 0 1px 2px rgba(10, 28, 34, 0.04), 0 12px 28px -18px rgba(10, 28, 34, 0.18);
+    --scrim: rgba(10, 28, 34, 0.42);
+
+    /* A panel that stands out from the page: the closing call to action. Deep teal in both themes. */
+    --panel-bg: #0b2a33;
+    --panel-fg: #eef6f8;
+    --panel-muted: #a8c3cb;
+    --panel-line: #27525e;
+    --panel-accent: #72cfe9;
+    --panel-btn-hover: #e2eff2;
+    /* Rising and falling lines drawn on the panel, which is dark in both themes. */
+    --panel-up: #5fcf95;
+    --panel-down: #ff8a7a;
+
+    /* The landing's light: a wash of brand colour at the top that fades into the page, and a faint tint for alternate sections. */
+    --glow-a: rgba(122, 205, 230, 0.3);
+    --glow-b: rgba(45, 115, 136, 0.1);
+    --band: rgba(45, 115, 136, 0.055);
+
+    --chart-grid: #e2eaed;
+  }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+
+    --paper: #071013;
+    --slip: #0d1a1e;
+    --wash: #12242a;
+    --line: #1b3037;
+    --line-2: #2a444d;
+    --ink: #e8f1f3;
+    --ink-2: #c0d1d6;
+    --muted: #8da4ab;
+    --faint: #6d8a94;
+
+    --brand: #5fc4e0;
+    --brand-strong: #8ad8ee;
+    --brand-soft: #12303a;
+    --brand-line: #24505d;
+    --brand-tint: #12303a;
+    --brand-glow: #34b7dd;
+
+    --long: #4cc58a;
+    --long-hover: #6bd3a0;
+    --long-soft: #10302a;
+    --long-line: #1f5a48;
+    --short: #ff8576;
+    --short-hover: #ff9d90;
+    --short-soft: #3a1c1b;
+    --short-line: #6d2f2a;
+    --warn: #f0b252;
+    --warn-soft: #33270f;
+    --warn-line: #66491b;
+
+    --btn-bg: #5fc4e0;
+    --btn-fg: #06181d;
+    --btn-bg-hover: #8ad8ee;
+    --on-long: #04140d;
+    --on-short: #2a0a06;
+
+    --shadow-xs: 0 1px 1px rgba(0, 0, 0, 0.35);
+    --shadow-pop: 0 1px 2px rgba(0, 0, 0, 0.4), 0 16px 40px -8px rgba(0, 0, 0, 0.6);
+    --shadow-slip: 0 1px 0 rgba(255, 255, 255, 0.03), 0 24px 48px -24px rgba(0, 0, 0, 0.7);
+    --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.03), 0 12px 28px -18px rgba(0, 0, 0, 0.6);
+    --scrim: rgba(2, 8, 10, 0.64);
+
+    --panel-bg: #0d2329;
+    --panel-fg: #e8f1f3;
+    --panel-muted: #8da4ab;
+    --panel-line: #29464f;
+    --panel-accent: #5fc4e0;
+    --panel-btn-hover: #ffffff;
+
+    --glow-a: rgba(52, 183, 221, 0.17);
+    --glow-b: rgba(95, 196, 224, 0.06);
+    --band: rgba(95, 196, 224, 0.045);
+
+    --chart-grid: #1b3036;
+  }
+}

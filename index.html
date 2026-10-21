@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f2f6f7" />
+    <meta name="description" content="Trade BTC and ETH with up to 100x leverage on Elysium's testnet. Anyone can recalculate every fill, liquidation and fee, and you can't lose more than you put into a trade." />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Twoprint" />
+    <meta property="og:title" content="Twoprint: Leverage you can verify" />
+    <meta property="og:description" content="Trade BTC and ETH with up to 100x leverage on Elysium's testnet. Anyone can recalculate every fill, liquidation and fee, and you can't lose more than you put into a trade." />
+    <meta name="twitter:card" content="summary" />
+    <title>Twoprint: Leverage you can verify</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" media="(prefers-color-scheme: light)" />
+    <link rel="icon" href="/favicon-dark.svg" type="image/svg+xml" media="(prefers-color-scheme: dark)" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <script>
+      try {
+        var t = localStorage.getItem("twoprint.theme");
+        if (t === "dark") {
+          document.documentElement.dataset.theme = "dark";
+          document.querySelector('meta[name="theme-color"]').setAttribute("content", "#071013");
+        }
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"><noscript>Twoprint needs JavaScript to run. Turn it on for this site and reload.</noscript></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
